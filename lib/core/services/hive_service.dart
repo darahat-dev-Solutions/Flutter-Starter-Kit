@@ -2,7 +2,8 @@ import 'package:ai_chat/core/errors/exceptions.dart';
 import 'package:ai_chat/core/utils/logger.dart';
 import 'package:ai_chat/features/app_settings/domain/settings_model.dart';
 import 'package:ai_chat/features/auth/domain/user_model.dart';
-import 'package:ai_chat/features/tasks/domain/task_model.dart';
+import 'package:ai_chat/features/auth/domain/user_role.dart'; // Import where UserRoleAdapter is defined
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../constants/hive_constants.dart';
@@ -10,78 +11,89 @@ import '../constants/hive_constants.dart';
 /// HiveService managing hive initial and hive box close function
 ///
 /// I can be call in main.dart file but we separated it so we can easily test and debug it
+///
+final hiveServiceProvider = Provider<HiveService>((ref) {
+  final logger = ref.watch(appLoggerProvider);
+  return HiveService(logger);
+});
+
+/// HiveService manages Hive initialization and box access.
 class HiveService {
-  ///Assigned HiveConstants authBox table names to variable
+  final AppLogger _appLogger;
+  bool _initialized = false;
+
+  /// Constructor receives dependencies.
+  HiveService(this._appLogger);
+
+  /// [authBox] Instance
   static const String authBoxName = HiveConstants.authBox;
 
-  ///Assigned HiveConstants taskBox table names to variable
-
+  /// [taskBox] Instance
   static const String taskBoxName = HiveConstants.taskBox;
 
-  /// Assigned HiveConstants settingsBox table name to settingsBoxName variable
+  /// [aiChatBox] Instance
+  static const String aiChatBoxName = HiveConstants.aiChatBox;
+
+  /// [uTouChatBox] Instance
+  static const String uTouChatBoxName = HiveConstants.uTouChatBox;
+
+  /// [settingsBoxName] Instance
   static const String settingsBoxName = HiveConstants.settingsBoxName;
 
-  static bool _initialized = false;
-
-  /// Initializing function of Hive flutter
-  static Future<void> init() async {
+  /// Hive Service Initialization
+  Future<void> init() async {
+    /// If all-ready initialized return nothing
     if (_initialized) return;
-
     try {
-      await Hive.initFlutter();
-
-      if (!Hive.isAdapterRegistered(0)) {
+      /// Teach Hive about [UToUChatModelAdapter] data model
+      if (!Hive.isAdapterRegistered(2)) {
         Hive.registerAdapter(UserModelAdapter());
       }
-      if (!Hive.isAdapterRegistered(1)) {
-        Hive.registerAdapter(TaskModelAdapter());
+
+      if (!Hive.isAdapterRegistered(6)) {
+        Hive.registerAdapter(UserRoleAdapter());
       }
-      if (!Hive.isAdapterRegistered(2)) {
+
+      if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(SettingDefinitionModelAdapter());
       }
+
+      /// Open The Database drawers to read/write data
       await Hive.openBox<UserModel>(authBoxName);
-      await Hive.openBox<TaskModel>(taskBoxName);
       await Hive.openBox<SettingDefinitionModel>(settingsBoxName);
 
+      /// Set _initialized value true
       _initialized = true;
-      AppLogger.info(
-        '🚀 ~This is an info message from my HiveService init so that Hive service is called',
+
+      _appLogger.info(
+        '🚀 ~This is an info message from my HiveService init so that Hive service is initialized',
       );
     } catch (e) {
+      /// Set  _initialized value false
       _initialized = false;
-      throw ServerException('🚀 ~Server error occurred $e');
-      // rethrow;
+      throw ServerException(
+        '🚀 ~Server error occurred (hive.service.dart) $e',
+      );
     }
   }
 
-  /// Close Hive boxes function if there any need to close Hive boxes
-  // static Future<void> _closeAllBoxes() async {
-  //   try {
-  //     if (Hive.isBoxOpen(authBoxName)) await Hive.box(authBoxName).close();
-  //     if (Hive.isBoxOpen(taskBoxName)) await Hive.box(taskBoxName).close();
-  //   } catch (_) {}
-  // }
   /// Auth box initialized
-  static Box<UserModel> get authBox {
+  Box<UserModel> get authBox {
     _checkInitialized();
     return Hive.box<UserModel>(authBoxName);
   }
 
-  ///taskBox initialized
-
-  static Box<TaskModel> get taskBox {
-    _checkInitialized();
-    return Hive.box<TaskModel>(taskBoxName);
-  }
-
   ///settingsBox initialized
-  static Box<TaskModel> get settingsBox {
+  Box<SettingDefinitionModel> get settingsBox {
     _checkInitialized();
-    return Hive.box<TaskModel>(settingsBoxName);
+    return Hive.box<SettingDefinitionModel>(settingsBoxName);
   }
 
   /// check are they initialized or not
-  static void _checkInitialized() {
+  void _checkInitialized() {
     if (!_initialized) throw Exception('HiveService not initialized');
   }
+
+  /// Clear all boxes
+  Future<void> clear() async {}
 }

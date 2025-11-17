@@ -16,4 +16,10 @@ class HiveConstants {
 
   /// hive box for tasks
   static const String taskBox = "task_box";
+
+  /// hive box for tasks
+  static const String aiChatBox = "ai_chat_box";
+
+  /// hive box for user to user chat
+  static const String uTouChatBox = "uTou_chat_box";
 }
