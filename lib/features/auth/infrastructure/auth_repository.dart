@@ -1,6 +1,7 @@
 import 'package:ai_chat/core/errors/exceptions.dart';
 import 'package:ai_chat/core/services/hive_service.dart'; // Import HiveService
 import 'package:ai_chat/core/utils/logger.dart';
+import 'package:ai_chat/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -93,6 +94,11 @@ class AuthRepository {
   /// Sign in with Google
   Future<UserModel?> signInWithGoogle() async {
     try {
+      // Initialize GoogleSignIn with serverClientId for Android
+      await GoogleSignIn.instance.initialize(
+        serverClientId: DefaultFirebaseOptions.android.androidClientId,
+      );
+
       final googleUser = await GoogleSignIn.instance.authenticate();
       final googleAuth = googleUser.authentication;
       final credential = GoogleAuthProvider.credential(

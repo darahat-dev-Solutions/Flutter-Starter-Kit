@@ -1,13 +1,13 @@
 import 'dart:io';
 
 import 'package:ai_chat/core/services/hive_service.dart';
+import 'package:ai_chat/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Initialization Service class
@@ -26,7 +26,9 @@ class InitializationService {
 
     /// Register background message handler
     await dotenv.load(fileName: ".env");
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     await Hive.initFlutter();
     if (dotenv.env['USE_FIREBASE_EMULATOR'] == 'true') {
       // For Android emulator use 10.0.2.2. for iOS use localhost.
@@ -39,9 +41,6 @@ class InitializationService {
         androidProvider: AndroidProvider.debug,
         appleProvider: AppleProvider.appAttest,
       );
-
-      /// No explicit initialize method is required for GoogleSignIn
-      GoogleSignIn.instance.initialize();
     }
 
     // await FirebaseAppCheck.instance.activate(

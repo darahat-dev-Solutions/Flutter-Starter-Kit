@@ -63,9 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '25940150454',
     projectId: 'flutter-starter-kit-3bd18',
     storageBucket: 'flutter-starter-kit-3bd18.firebasestorage.app',
-    androidClientId: '25940150454-4qklgv283cfevtpjpk39u68dqibjl4nm.apps.googleusercontent.com',
-    iosClientId: '25940150454-4tb4hqrefifuj33n916ctsbpijs421dd.apps.googleusercontent.com',
+    androidClientId:
+        '25940150454-4qklgv283cfevtpjpk39u68dqibjl4nm.apps.googleusercontent.com',
+    iosClientId:
+        '25940150454-4tb4hqrefifuj33n916ctsbpijs421dd.apps.googleusercontent.com',
     iosBundleId: 'com.example.opsmate',
   );
-
 }
