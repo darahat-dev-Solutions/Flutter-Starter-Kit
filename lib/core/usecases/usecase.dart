@@ -1,10 +1,10 @@
 ///Abstract base class for use cases in the application
 ///
-/// [Type] represents the return type of the use case
+/// [T] represents the return type of the use case
 /// [Params] represents the parameters required by the use case
-abstract class UseCase<Type, Params> {
+abstract class UseCase<T, Params> {
   /// Executes the use case with the provided parameters
-  Future<Type> call(Params params);
+  Future<T> call(Params params);
 }
 
 /// Represents a use case with no input parameters

@@ -1,5 +1,4 @@
 import 'package:ai_chat/app/app_route.dart';
-import 'package:ai_chat/core/utils/logger.dart';
 import 'package:ai_chat/features/auth/application/auth_state.dart';
 import 'package:ai_chat/features/auth/domain/user_role.dart';
 import 'package:ai_chat/features/auth/presentation/pages/forgot_password_page.dart';
@@ -28,7 +27,6 @@ class AuthListenable extends ChangeNotifier {
   /// it calls `notifyListeners()` to trigger a UI update.
   AuthListenable(this.ref) {
     ref.listen<AuthState>(authControllerProvider, (previous, next) {
-      AppLogger.info('AuthState changed: $next');
       notifyListeners();
     });
   }
@@ -138,14 +136,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       /// We need to handle the case where the route might not be in our list
       final route = routes.firstWhere(
         (r) => r.path == state.matchedLocation,
-        orElse:
-            () => AppRoute(
-              path: '/not-found',
-              builder: (context, state) => const Scaffold(),
-              allowedRoles: [],
+        orElse: () => AppRoute(
+          path: '/not-found',
+          builder: (context, state) => const Scaffold(),
+          allowedRoles: [],
 
-              /// No Roles Allowed , will trigger a redirect
-            ),
+          /// No Roles Allowed , will trigger a redirect
+        ),
       );
 
       /// Check if the user's role is allowed for this route

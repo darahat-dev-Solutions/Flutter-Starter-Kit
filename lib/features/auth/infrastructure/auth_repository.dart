@@ -1,35 +1,72 @@
 import 'package:ai_chat/core/errors/exceptions.dart';
+import 'package:ai_chat/core/services/hive_service.dart'; // Import HiveService
 import 'package:ai_chat/core/utils/logger.dart';
+import 'package:ai_chat/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart'
-    show kIsWeb; // Make sure to add this import
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hive/hive.dart';
 
 import '../domain/user_model.dart';
 
-/// this is the file where auth_controller connect with repositories
+/// A Repository for managing auth-related operation with hive and firebase
 class AuthRepository {
-  final _auth = FirebaseAuth.instance;
-  final _googleSignIn = GoogleSignIn();
-  // final _box = Hive.box<UserModel>('authBox');
+  /// [FirebaseFirestore] instance
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// this is SignUp model function which will call from controller
+  /// [FirebaseAuth] instance
+  final _auth = FirebaseAuth.instance;
+
+  /// [AppLogger] instance
+  final AppLogger _appLogger;
+
+  /// [HiveService] Instance
+  final HiveService _hiveService;
+
+  /// The internal hive box for setting
+  Box<UserModel> get _box => _hiveService.authBox;
+
+  /// [AuthRepository] constructor
+  AuthRepository(this._hiveService, this._appLogger);
+
+  /// Creates User With Email and Password
   Future<UserModel?> signUp(String email, String password, String name) async {
     final cred = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
-    return UserModel(uid: cred.user!.uid, email: cred.user!.email!);
+    await _saveUserData(
+      cred.user!,
+      cred.user!.displayName ?? cred.user!.email ?? '',
+      cred.user!.photoURL ?? '',
+    );
+    return UserModel(
+      uid: cred.user!.uid,
+      email: cred.user!.email ?? '',
+      displayName: cred.user!.displayName ?? cred.user!.email ?? '',
+      photoURL: cred.user!.photoURL ?? '',
+    );
   }
 
-  /// this is Signin model function which will call from controller
+  /// Sign in with Email and Password
   Future<UserModel?> signIn(String email, String password) async {
     try {
       final cred = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return UserModel(uid: cred.user!.uid, email: cred.user!.email!);
+      await _saveUserData(
+        cred.user!,
+        cred.user!.displayName ?? cred.user!.email ?? '',
+        cred.user!.photoURL ?? '',
+      );
+      return UserModel(
+        uid: cred.user!.uid,
+        email: cred.user!.email ?? '',
+        photoURL: cred.user!.photoURL ?? '',
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         throw const AuthenticationException(
@@ -46,22 +83,33 @@ class AuthRepository {
     }
   }
 
-  /// This is Signin model function for google signin which will call from controller
+  /// Sign in with Google
   Future<UserModel?> signInWithGoogle() async {
     try {
-      final googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        /// User canceled the sign-in
-        throw AuthenticationException('🚀 ~ User Canceled the Sign-in');
-      }
-      final googleAuth = await googleUser.authentication;
+      // Initialize GoogleSignIn with serverClientId for Android
+      await GoogleSignIn.instance.initialize(
+        serverClientId: DefaultFirebaseOptions.android.androidClientId,
+      );
+
+      final googleUser = await GoogleSignIn.instance.authenticate();
+      final googleAuth = googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
+        accessToken: googleAuth.idToken,
         idToken: googleAuth.idToken,
       );
       final cred = await _auth.signInWithCredential(credential);
 
-      return UserModel(uid: cred.user!.uid, email: cred.user!.email!);
+      await _saveUserData(
+        cred.user!,
+        cred.user!.displayName ?? cred.user!.email ?? '',
+        cred.user!.photoURL ?? '',
+      );
+      return UserModel(
+        uid: cred.user!.uid,
+        email: cred.user!.email ?? '',
+        displayName: cred.user!.displayName ?? cred.user!.email ?? '',
+        photoURL: cred.user!.photoURL ?? '',
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         throw const AuthenticationException(
@@ -73,13 +121,13 @@ class AuthRepository {
           'Google sign in failed. Please try again',
         );
       }
-    } catch (e) {
-      AppLogger.error('🚀 ~ Error during Google Sign-in');
+    } catch (e, s) {
+      _appLogger.error('🚀 ~ Error during Google Sign-in $e and status is $s');
       throw AuthenticationException('🚀 ~ Google Sign in failed $e');
     }
   }
 
-  /// This is Signin model function for github signin which will call from controller
+  /// Sign in With GitHub
   Future<UserModel?> signInWithGithub() async {
     try {
       final githubAuthProvider = GithubAuthProvider();
@@ -89,7 +137,17 @@ class AuthRepository {
       } else {
         cred = await _auth.signInWithProvider(githubAuthProvider);
       }
-      return UserModel(uid: cred.user!.uid, email: cred.user!.email!);
+      await _saveUserData(
+        cred.user!,
+        cred.user!.displayName ?? cred.user!.email ?? '',
+        cred.user!.photoURL ?? '',
+      );
+      return UserModel(
+        uid: cred.user!.uid,
+        email: cred.user!.email ?? '',
+        displayName: cred.user!.displayName ?? cred.user!.email ?? '',
+        photoURL: cred.user!.photoURL ?? '',
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'account-exists-with-different-credential') {
         throw const AuthenticationException(
@@ -102,55 +160,58 @@ class AuthRepository {
         );
       }
     } catch (e) {
-      AppLogger.error('🚀 ~ Error during Github Sign-in', e);
+      _appLogger.error('🚀 ~ Error during Github Sign-in', e);
       throw const AuthenticationException(
         '🚀 ~Failed to sign in with GitHub. Please try again.',
       );
     }
   }
 
-  /// Sends a password reset email to the given email address
+  /// Send Password Reset Email
   Future<void> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      AppLogger.error('🚀 ~ sendPasswordResetEmail Error', e);
+      _appLogger.error('🚀 ~ sendPasswordResetEmail Error', e);
       throw const AuthenticationException(
         '🚀 ~Failed to send Password Reset Email',
       );
     }
   }
 
-  /// model function for logout which will call from controller
+  /// Sign Out Function
   Future<void> signOut() async {
     await _auth.signOut();
-    await _googleSignIn.signOut();
+    await GoogleSignIn.instance.signOut();
+    await _hiveService.clear();
+
+    // Redirect to login screen after logout
   }
 
-  /// OTP send Repository Function
+  /// Send OTP Function for Sign up/Sign In using mobile phone number
   Future<void> sendOTP(
     String phoneNumber, {
     required Function(String, int?) codeSent,
     Function(String)? codeAutoRetrievalTimeoutCallback,
   }) async {
-    AppLogger.debug('🚀send otp called with this number $phoneNumber');
+    _appLogger.debug('🚀send otp called with this number $phoneNumber');
 
     try {
-      AppLogger.debug('🚀send otp called with this number2 $phoneNumber');
+      _appLogger.debug('🚀send otp called with this number2 $phoneNumber');
 
       await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
           await _auth.signInWithCredential(credential);
-          AppLogger.debug('🚀 Verification completed $codeSent, $credential');
+          _appLogger.debug('🚀 Verification completed $codeSent, $credential');
         },
         verificationFailed: (FirebaseAuthException e) {
-          AppLogger.debug('🚀 ~Failed to send OTP $e');
+          _appLogger.debug('🚀 ~Failed to send OTP $e');
           throw AuthenticationException(e.message ?? '🚀 ~Failed to send OTP');
         },
         codeSent: codeSent,
         codeAutoRetrievalTimeout: (String verificationId) {
-          AppLogger.debug('🚀 ~Code getting timeout $verificationId');
+          _appLogger.debug('🚀 ~Code getting timeout $verificationId');
           codeAutoRetrievalTimeoutCallback?.call(verificationId);
         },
       );
@@ -159,8 +220,7 @@ class AuthRepository {
     }
   }
 
-  /// Verify OTP auth_Repository Function
-
+  /// Verify OTP Function for Sign up/Sign In using mobile phone number
   Future<UserModel?> verifyOTP(String verificationId, String smsCode) async {
     try {
       final credential = PhoneAuthProvider.credential(
@@ -168,14 +228,23 @@ class AuthRepository {
         smsCode: smsCode,
       );
       final cred = await _auth.signInWithCredential(credential);
-      return UserModel(uid: cred.user!.uid, email: cred.user!.email!);
+      await _saveUserData(
+        cred.user!,
+        cred.user!.displayName ?? cred.user!.email ?? '',
+        cred.user!.photoURL ?? '',
+      );
+      return UserModel(
+        uid: cred.user!.uid,
+        email: cred.user!.email ?? '',
+        displayName: cred.user!.displayName ?? cred.user!.email ?? '',
+        photoURL: cred.user!.photoURL ?? '',
+      );
     } catch (e) {
       throw AuthenticationException('🚀 ~Failed to verify OTP');
     }
   }
 
-  /// Resent OTP auth_Repository Function
-
+  /// Resend OTP if time out
   Future<void> resendOTP(
     String phoneNumber, {
     required Function(String, int?) codeSent,
@@ -194,6 +263,108 @@ class AuthRepository {
       );
     } catch (e) {
       throw AuthenticationException('Failed to resend OTP');
+    }
+  }
+
+  /// Get User's data from firebase authentication
+  Stream<List<UserModel>> getUsers() {
+    return _firestore.collection('users').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+
+        return UserModel(
+          uid: doc.id,
+          email: data['email'] ?? '',
+          displayName: data['displayName'] ?? data['email'] ?? '',
+          photoURL: data['photoURL'] ?? '',
+
+          /// Assuming 'role' is also field in your Firestore document
+          role: parseUserRole(data['role'] as String?),
+        );
+      }).toList();
+    });
+  }
+
+  /// Saves data to firebase and local hive DB
+  Future<void> _saveUserData(
+    User user,
+    String? displayName,
+    String? photoURL,
+  ) async {
+    final userDoc = _firestore.collection('users').doc(user.uid);
+    final snapshot = await userDoc.get();
+
+    final fcmTokens = await FirebaseMessaging.instance.getToken();
+    final finalDisplayName =
+        displayName ?? user.displayName ?? user.email ?? '';
+    final finalPhotoURL = photoURL ?? user.photoURL ?? '';
+
+    final UserModel userModel = UserModel(
+      uid: user.uid,
+      email: user.email ?? '',
+      displayName: finalDisplayName,
+      photoURL: finalPhotoURL,
+    );
+
+    if (!snapshot.exists) {
+      await userDoc.set({
+        'uid': user.uid,
+        'email': user.email ?? '',
+        'displayName': finalDisplayName,
+        'photoURL': finalPhotoURL,
+        'createdAt': FieldValue.serverTimestamp(),
+        'fcmTokens': [fcmTokens],
+      }, SetOptions(merge: true));
+
+      /// Save data to HIve DB
+      _box.put(user.uid, userModel);
+    } else {
+      await userDoc.update({
+        'fcmTokens': FieldValue.arrayUnion([fcmTokens]),
+      });
+      _box.put(user.uid, userModel);
+    }
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+      await userDoc.update({'fcmTokens': newToken});
+    });
+
+    /// ✅ Save to Hive
+    await _box.put(user.uid, userModel);
+  }
+
+  /// Gets Current User.
+  Future<UserModel?> getCurrentUser() async {
+    final user = _auth.currentUser;
+    if (user == null) {
+      return null; // User is not logged in
+    }
+    try {
+      /// First try to get the fresh "Online" data
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+
+      if (userDoc.exists) {
+        /// Online data found!
+        final data = userDoc.data()!;
+
+        /// Ensure email is not null before passing from json
+        data['email'] = data['email'] ?? '';
+        // Update the local cache with the fresh data
+        final userModel = UserModel.fromJson(data);
+
+        /// Update the local cache with the fresh data
+        await _box.put(user.uid, userModel);
+        return userModel;
+      } else {
+        /// User is authenticated, but not in Firestore? fallback to local
+        return _box.get(user.uid);
+      }
+    } catch (e) {
+      /// An error occured(likely offline), so fallback to local cache
+      _appLogger.error(
+        "Could not fetch user online, falling back to local cache.",
+        e,
+      );
+      return _box.get(user.uid);
     }
   }
 }

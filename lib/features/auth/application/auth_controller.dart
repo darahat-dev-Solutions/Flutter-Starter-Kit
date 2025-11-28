@@ -1,40 +1,57 @@
-import 'package:ai_chat/core/errors/exceptions.dart';
-import 'package:ai_chat/core/services/hive_service.dart';
 import 'package:ai_chat/core/utils/logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 
+import '../domain/user_model.dart';
 import '../infrastructure/auth_repository.dart';
 import 'auth_state.dart';
 
-/// this class is calling auth_repository model functions
-///
-/// and put user data to hive box and changing state value
+/// A controller class which manages user authentication
 class AuthController extends StateNotifier<AuthState> {
+  /// Required instances
   final AuthRepository _authRepository;
+  final Box<UserModel> _authBox;
+
+  /// Required references and variables
+  final Ref ref;
   String? _verificationId;
   String? _phoneNumber;
+  final AppLogger _appLogger;
 
-  /// AuthController Constructor for call outside
-  AuthController(this._authRepository) : super(const AuthInitial());
+  /// AuthController Constructor
+  AuthController(this._authRepository, this._authBox, this.ref, this._appLogger)
+      : super(const AuthInitial());
 
   /// Check User is Authenticated need to call in main to check
-  void checkInitialAuthState() {
-    final user = HiveService.authBox.get('user');
-    if (user != null) {
-      state = Authenticated(user);
-    } else {
-      state = const Unauthenticated();
+  void checkInitialAuthState() async {
+    final getOnlineUser = await _authRepository.getCurrentUser();
+    // Prefer the online Firebase user, otherwise fall back to locally stored user in Hive
+    final localUser = _authBox.get('user');
+
+    if (getOnlineUser != null) {
+      _appLogger.debug('Online user found: ${getOnlineUser.displayName}');
+      state = Authenticated(getOnlineUser);
+      return;
     }
+
+    if (localUser != null) {
+      _appLogger.debug(
+          'Using local user from Hive: ${localUser.displayName ?? localUser.uid}');
+      state = Authenticated(localUser);
+      return;
+    }
+
+    _appLogger.debug('No authenticated user found. Staying unauthenticated.');
+    state = const AuthInitial();
   }
 
-  /// Email & Password SignUp Controller function
+  /// Maintain Email & Password SignUp
   Future<void> signUp(String email, String password, String name) async {
     state = const AuthLoading();
     try {
       final user = await _authRepository.signUp(email, password, name);
       if (user != null) {
-        HiveService.authBox.put('user', user);
         state = Authenticated(user);
       } else {
         state = const AuthError(
@@ -47,13 +64,12 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  /// Email & Password SignIn Controller function
+  /// Maintain Email & Password SignIn
   Future<void> signIn(String email, String password) async {
     state = const AuthLoading();
     try {
       final user = await _authRepository.signIn(email, password);
       if (user != null) {
-        HiveService.authBox.put('user', user);
         state = Authenticated(user);
       } else {
         state = const AuthError(
@@ -66,14 +82,15 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  /// Google SignIn Controller function
+  /// Maintain Google SignIn
   Future<void> signInWithGoogle() async {
     state = const AuthLoading();
     try {
       final user = await _authRepository.signInWithGoogle();
       if (user != null) {
-        HiveService.authBox.put('user', user);
         state = Authenticated(user);
+        _appLogger.error('Check what the state status ${state.uid.toString()}');
+        _appLogger.error('Check the display name ${user.uid}');
       } else {
         state = const AuthError(
           'Google Sign in failed. Please try again.',
@@ -92,13 +109,12 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  /// Google SignIn Controller function
+  /// Maintain Google SignIn
   Future<void> signInWithGithub() async {
     state = const AuthLoading();
     try {
       final user = await _authRepository.signInWithGithub();
       if (user != null) {
-        HiveService.authBox.put('user', user);
         state = Authenticated(user);
       }
     } on FirebaseAuthException catch (e) {
@@ -113,7 +129,7 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  /// Forget Password reset mail Controller function
+  /// Send Forget Password reset mail
   Future<void> sendPasswordResetEmail(String email) async {
     state = const AuthLoading();
     try {
@@ -131,22 +147,25 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  /// Sign out controller function
+  ///Maintain Sign out
   Future<void> signOut() async {
     state = const AuthLoading();
     try {
       await _authRepository.signOut();
-      await HiveService.authBox.delete('user');
+      await _authBox.clear();
+      await _authBox.delete('user');
+      // Assuming goRouterProvider exists
       state = const AuthInitial();
-    } catch (e) {
-      throw AuthenticationException('Sign Out Failed');
+    } catch (e, s) {
+      _appLogger.error('App logger from signout $e \n $s');
     }
   }
 
-  /// Phone authentication Sending OTP
+  /// Maintain Phone authentication Sending OTP
   Future<void> sendOTP(String phoneNumber) async {
     // state = const AuthLoading();
-    AppLogger.debug(
+    // state = const AuthLoading();
+    _appLogger.debug(
       '🚀 ~ Trying to send OTP from auth controller $phoneNumber',
     );
 
@@ -154,26 +173,25 @@ class AuthController extends StateNotifier<AuthState> {
       await _authRepository.sendOTP(
         phoneNumber,
         codeSent: (verificationId, resendToken) {
-          AppLogger.debug(
-            '🚀 ~ Trying to send OTP 1 from auth controller from codesent start $verificationId , $resendToken',
+          _appLogger.debug(
+            '🚀 ~ Trying to send OTP 1 from auth controller from co d sent start $verificationId , $resendToken',
           );
 
           _verificationId = verificationId;
           state = const OTPSent();
-          AppLogger.debug(
-            '🚀 ~ what is the state after codesent $_verificationId , $state',
+          _appLogger.debug(
+            '🚀 ~ what is the state after cod sent $_verificationId , $state',
           );
         },
       );
-      AppLogger.debug('🚀 ~ Trying to send OTP from auth controller');
+      _appLogger.debug('🚀 ~ Trying to send OTP from auth controller');
     } catch (e) {
-      AppLogger.debug('🚀 ~ send OTP failed from auth controller');
+      _appLogger.debug('🚀 ~ send OTP failed from auth controller');
       state = AuthError(e.toString(), AuthMethod.phone);
     }
   }
 
-  /// Phone authentication verify OTP
-
+  /// Maintain Phone authentication verify OTP
   Future<void> verifyOTP(String smsCode) async {
     state = const AuthLoading();
     try {
@@ -182,7 +200,6 @@ class AuthController extends StateNotifier<AuthState> {
       }
       final user = await _authRepository.verifyOTP(_verificationId!, smsCode);
       if (user != null) {
-        HiveService.authBox.put('user', user);
         state = Authenticated(user);
       } else {
         state = const AuthError('OTP verification failed', AuthMethod.phone);
@@ -192,7 +209,7 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  /// Phone authentication if send OTP failed
+  /// Maintain Resend Phone authentication if send OTP failed
 
   Future<void> resendOTP() async {
     state = const AuthLoading();
