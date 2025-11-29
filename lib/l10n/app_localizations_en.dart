@@ -211,4 +211,136 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get listening => 'Listening...';
+
+  @override
+  String get secondPage => 'Messages';
+
+  @override
+  String get chatAndMessages => 'Chat and Messages';
+
+  @override
+  String get thirdPage => 'AI Chat';
+
+  @override
+  String get aiChatAssistant => 'AI Chat Assistant';
+
+  @override
+  String get helpCenterComingSoon => 'Help center coming soon!';
+
+  @override
+  String get dreamFlutterStarterKit => 'Dream Flutter Starter Kit';
+
+  @override
+  String get optionSecond => 'Messages';
+
+  @override
+  String get optionThird => 'AI Chat';
+
+  @override
+  String get readyToExplore => 'Ready to explore? 🚀';
+
+  @override
+  String get newFeaturesComingSoon => 'New Features Coming Soon!';
+
+  @override
+  String get workingOnExcitingUpdates => 'We\'re working on exciting updates';
+
+  @override
+  String get aiChatFeatures => 'AI Chat Features';
+
+  @override
+  String get currentlyUnderDevelopment => 'Currently under development';
+
+  @override
+  String get aiChatDescription => 'We\'re building AI Chat option where AI will read your REST API and reply according your provided data';
+
+  @override
+  String get developmentProgress => 'Development Progress';
+
+  @override
+  String get comingSoonFeatures => 'Coming Soon Features';
+
+  @override
+  String get giveOrder => 'Give Order';
+
+  @override
+  String get aiCanTakeOrder => 'AI can take order';
+
+  @override
+  String get multiModule => 'Multi Module';
+
+  @override
+  String get multiModuleAiAct => 'Multi Module AI Act';
+
+  @override
+  String get voiceToText => 'Voice to Text';
+
+  @override
+  String get userCanOrderInVoice => 'User can Order in voice';
+
+  @override
+  String get billGenerate => 'Bill Generate';
+
+  @override
+  String get aiCanGenerateBill => 'AI Can Generate Bill';
+
+  @override
+  String get quickActions => 'Quick Actions';
+
+  @override
+  String get support => 'Support';
+
+  @override
+  String get stayUpdated => 'Stay Updated';
+
+  @override
+  String get notifyWhenReady => 'We\'ll notify you when new features are ready';
+
+  @override
+  String get aiChatModule => 'AI Chat Module';
+
+  @override
+  String get loadingSettings => 'Loading settings...';
+
+  @override
+  String get failedToLoadSettings => 'Failed to load settings';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get darkThemeEnabled => 'Dark theme enabled';
+
+  @override
+  String get lightThemeEnabled => 'Light theme enabled';
+
+  @override
+  String get darkModeDescription => 'Change how the app looks. Dark mode is easier on the eyes in low light.';
+
+  @override
+  String get appLanguage => 'App Language';
+
+  @override
+  String get choosePreferredLanguage => 'Choose your preferred language';
+
+  @override
+  String get aiChatModel => 'AI Chat Model';
+
+  @override
+  String get choosePreferredAiModel => 'Choose your preferred AI model';
+
+  @override
+  String get aiModelCapabilities => 'Different AI models may have varying capabilities and response styles.';
+
+  @override
+  String get welcomeUser => 'Welcome User';
+
+  @override
+  String get aiAssistant => 'AI Assistant';
+
+  @override
+  String get messages => 'Messages';
+
+  @override
+  String get noName => 'No Name';
 }

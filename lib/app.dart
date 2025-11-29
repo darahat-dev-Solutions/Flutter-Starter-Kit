@@ -36,13 +36,16 @@ class App extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       localeResolutionCallback: (locale, supportedLocales) {
-        for (var supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale?.languageCode &&
-              supportedLocale.countryCode == locale?.countryCode) {
-            return supportedLocale;
+        // Check if the locale language code matches any supported locale
+        if (locale != null) {
+          for (var supportedLocale in supportedLocales) {
+            if (supportedLocale.languageCode == locale.languageCode) {
+              return supportedLocale;
+            }
           }
         }
-        return const Locale('en', 'US');
+        // Default to English if no match found
+        return const Locale('en');
       },
       routerConfig: router,
       debugShowCheckedModeBanner: false,

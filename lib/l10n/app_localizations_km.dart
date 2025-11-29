@@ -211,4 +211,136 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get listening => 'កំពុងស្តាប់...';
+
+  @override
+  String get secondPage => 'សារ';
+
+  @override
+  String get chatAndMessages => 'ការជជែក និងសារ';
+
+  @override
+  String get thirdPage => 'ការជជែក AI';
+
+  @override
+  String get aiChatAssistant => 'ជំនួយការជជែក AI';
+
+  @override
+  String get helpCenterComingSoon => 'មជ្ឈមណ្ឌលជំនួយនឹងមកដល់ឆាប់ៗនេះ!';
+
+  @override
+  String get dreamFlutterStarterKit => 'ឧបករណ៍ចាប់ផ្ដើម Dream Flutter';
+
+  @override
+  String get optionSecond => 'សារ';
+
+  @override
+  String get optionThird => 'ការជជែក AI';
+
+  @override
+  String get readyToExplore => 'ត្រៀមខ្លួនដើម្បីស្វែងរកទេ? 🚀';
+
+  @override
+  String get newFeaturesComingSoon => 'មុខងារថ្មីនឹងមកដល់ឆាប់ៗនេះ!';
+
+  @override
+  String get workingOnExcitingUpdates => 'យើងកំពុងធ្វើការលើការធ្វើបច្ចុប្បន្នភាពដ៏រំភើប';
+
+  @override
+  String get aiChatFeatures => 'មុខងារជជែក AI';
+
+  @override
+  String get currentlyUnderDevelopment => 'បច្ចុប្បន្នកំពុងអភិវឌ្ឍ';
+
+  @override
+  String get aiChatDescription => 'យើងកំពុងបង្កើតជម្រើសជជែក AI ដែល AI នឹងអាន REST API របស់អ្នក ហើយឆ្លើយតបតាមទិន្នន័យដែលបានផ្តល់';
+
+  @override
+  String get developmentProgress => 'ដំណើរការអភិវឌ្ឍន៍';
+
+  @override
+  String get comingSoonFeatures => 'មុខងារនឹងមកដល់ឆាប់ៗនេះ';
+
+  @override
+  String get giveOrder => 'ផ្តល់ការបញ្ជាទិញ';
+
+  @override
+  String get aiCanTakeOrder => 'AI អាចទទួលការបញ្ជាទិញ';
+
+  @override
+  String get multiModule => 'ម៉ូឌុលច្រើន';
+
+  @override
+  String get multiModuleAiAct => 'AI ម៉ូឌុលច្រើន';
+
+  @override
+  String get voiceToText => 'សំឡេងទៅអត្ថបទ';
+
+  @override
+  String get userCanOrderInVoice => 'អ្នកប្រើប្រាស់អាចបញ្ជាទិញដោយសំឡេង';
+
+  @override
+  String get billGenerate => 'បង្កើតវិក្កយបត្រ';
+
+  @override
+  String get aiCanGenerateBill => 'AI អាចបង្កើតវិក្កយបត្រ';
+
+  @override
+  String get quickActions => 'សកម្មភាពរហ័ស';
+
+  @override
+  String get support => 'ជំនួយ';
+
+  @override
+  String get stayUpdated => 'ទទួលបានការធ្វើបច្ចុប្បន្នភាព';
+
+  @override
+  String get notifyWhenReady => 'យើងនឹងជូនដំណឹងដល់អ្នកនៅពេលមុខងារថ្មីរួចរាល់';
+
+  @override
+  String get aiChatModule => 'ម៉ូឌុលជជែក AI';
+
+  @override
+  String get loadingSettings => 'កំពុងផ្ទុកការកំណត់...';
+
+  @override
+  String get failedToLoadSettings => 'បរាជ័យក្នុងការផ្ទុកការកំណត់';
+
+  @override
+  String get tryAgain => 'ព្យាយាមម្តងទៀត';
+
+  @override
+  String get darkThemeEnabled => 'បើកប្រើរចនាប័ទ្មងងឹត';
+
+  @override
+  String get lightThemeEnabled => 'បើកប្រើរចនាប័ទ្មភ្លឺ';
+
+  @override
+  String get darkModeDescription => 'ផ្លាស់ប្តូររូបរាងកម្មវិធី។ របៀបងងឹតងាយស្រួលសម្រាប់ភ្នែកនៅពេលមានពន្លឺតិច។';
+
+  @override
+  String get appLanguage => 'ភាសាកម្មវិធី';
+
+  @override
+  String get choosePreferredLanguage => 'ជ្រើសរើសភាសាដែលអ្នកចូលចិត្ត';
+
+  @override
+  String get aiChatModel => 'ម៉ូដែលជជែក AI';
+
+  @override
+  String get choosePreferredAiModel => 'ជ្រើសរើសម៉ូដែល AI ដែលអ្នកចូលចិត្ត';
+
+  @override
+  String get aiModelCapabilities => 'ម៉ូដែល AI ផ្សេងៗគ្នាអាចមានសមត្ថភាពនិងរចនាប័ទ្មឆ្លើយតបខុសៗគ្នា។';
+
+  @override
+  String get welcomeUser => 'សូមស្វាគមន៍អ្នកប្រើប្រាស់';
+
+  @override
+  String get aiAssistant => 'ជំនួយការ AI';
+
+  @override
+  String get messages => 'សារ';
+
+  @override
+  String get noName => 'គ្មានឈ្មោះ';
 }

@@ -1,3 +1,4 @@
+import 'package:ai_chat/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'login_page.dart';
@@ -12,7 +13,9 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(title: const Text("Dream Flutter Starter Kit")),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.dreamFlutterStarterKit),
+      ),
       body: const LoginPage(),
     );
   }

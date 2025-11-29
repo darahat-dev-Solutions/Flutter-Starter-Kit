@@ -211,4 +211,136 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get listening => '聞いています...';
+
+  @override
+  String get secondPage => 'メッセージ';
+
+  @override
+  String get chatAndMessages => 'チャットとメッセージ';
+
+  @override
+  String get thirdPage => 'AIチャット';
+
+  @override
+  String get aiChatAssistant => 'AIチャットアシスタント';
+
+  @override
+  String get helpCenterComingSoon => 'ヘルプセンターは近日公開予定！';
+
+  @override
+  String get dreamFlutterStarterKit => 'Dream Flutterスターターキット';
+
+  @override
+  String get optionSecond => 'メッセージ';
+
+  @override
+  String get optionThird => 'AIチャット';
+
+  @override
+  String get readyToExplore => '探索する準備はできましたか？ 🚀';
+
+  @override
+  String get newFeaturesComingSoon => '新機能が近日公開！';
+
+  @override
+  String get workingOnExcitingUpdates => 'ワクワクするアップデートに取り組んでいます';
+
+  @override
+  String get aiChatFeatures => 'AIチャット機能';
+
+  @override
+  String get currentlyUnderDevelopment => '現在開発中';
+
+  @override
+  String get aiChatDescription => 'AIがあなたのREST APIを読み取り、提供されたデータに応じて返信するAIチャットオプションを構築しています';
+
+  @override
+  String get developmentProgress => '開発進捗';
+
+  @override
+  String get comingSoonFeatures => '近日公開機能';
+
+  @override
+  String get giveOrder => '注文する';
+
+  @override
+  String get aiCanTakeOrder => 'AIが注文を受け取れます';
+
+  @override
+  String get multiModule => 'マルチモジュール';
+
+  @override
+  String get multiModuleAiAct => 'マルチモジュールAI';
+
+  @override
+  String get voiceToText => '音声からテキスト';
+
+  @override
+  String get userCanOrderInVoice => 'ユーザーは音声で注文できます';
+
+  @override
+  String get billGenerate => '請求書生成';
+
+  @override
+  String get aiCanGenerateBill => 'AIが請求書を生成できます';
+
+  @override
+  String get quickActions => 'クイックアクション';
+
+  @override
+  String get support => 'サポート';
+
+  @override
+  String get stayUpdated => '最新情報を入手';
+
+  @override
+  String get notifyWhenReady => '新機能の準備ができたら通知します';
+
+  @override
+  String get aiChatModule => 'AIチャットモジュール';
+
+  @override
+  String get loadingSettings => '設定を読み込み中...';
+
+  @override
+  String get failedToLoadSettings => '設定の読み込みに失敗しました';
+
+  @override
+  String get tryAgain => '再試行';
+
+  @override
+  String get darkThemeEnabled => 'ダークテーマ有効';
+
+  @override
+  String get lightThemeEnabled => 'ライトテーマ有効';
+
+  @override
+  String get darkModeDescription => 'アプリの見た目を変更します。ダークモードは暗い場所で目に優しいです。';
+
+  @override
+  String get appLanguage => 'アプリの言語';
+
+  @override
+  String get choosePreferredLanguage => 'お好みの言語を選択してください';
+
+  @override
+  String get aiChatModel => 'AIチャットモデル';
+
+  @override
+  String get choosePreferredAiModel => 'お好みのAIモデルを選択してください';
+
+  @override
+  String get aiModelCapabilities => '異なるAIモデルは、さまざまな機能と応答スタイルを持つ場合があります。';
+
+  @override
+  String get welcomeUser => 'ようこそユーザー';
+
+  @override
+  String get aiAssistant => 'AIアシスタント';
+
+  @override
+  String get messages => 'メッセージ';
+
+  @override
+  String get noName => '名前なし';
 }

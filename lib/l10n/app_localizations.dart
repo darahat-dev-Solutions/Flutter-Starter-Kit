@@ -506,6 +506,270 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Listening...'**
   String get listening;
+
+  /// No description provided for @secondPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get secondPage;
+
+  /// No description provided for @chatAndMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat and Messages'**
+  String get chatAndMessages;
+
+  /// No description provided for @thirdPage.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get thirdPage;
+
+  /// No description provided for @aiChatAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat Assistant'**
+  String get aiChatAssistant;
+
+  /// No description provided for @helpCenterComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Help center coming soon!'**
+  String get helpCenterComingSoon;
+
+  /// No description provided for @dreamFlutterStarterKit.
+  ///
+  /// In en, this message translates to:
+  /// **'Dream Flutter Starter Kit'**
+  String get dreamFlutterStarterKit;
+
+  /// No description provided for @optionSecond.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get optionSecond;
+
+  /// No description provided for @optionThird.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat'**
+  String get optionThird;
+
+  /// No description provided for @readyToExplore.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to explore? 🚀'**
+  String get readyToExplore;
+
+  /// No description provided for @newFeaturesComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'New Features Coming Soon!'**
+  String get newFeaturesComingSoon;
+
+  /// No description provided for @workingOnExcitingUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re working on exciting updates'**
+  String get workingOnExcitingUpdates;
+
+  /// No description provided for @aiChatFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat Features'**
+  String get aiChatFeatures;
+
+  /// No description provided for @currentlyUnderDevelopment.
+  ///
+  /// In en, this message translates to:
+  /// **'Currently under development'**
+  String get currentlyUnderDevelopment;
+
+  /// No description provided for @aiChatDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'re building AI Chat option where AI will read your REST API and reply according your provided data'**
+  String get aiChatDescription;
+
+  /// No description provided for @developmentProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Development Progress'**
+  String get developmentProgress;
+
+  /// No description provided for @comingSoonFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon Features'**
+  String get comingSoonFeatures;
+
+  /// No description provided for @giveOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Give Order'**
+  String get giveOrder;
+
+  /// No description provided for @aiCanTakeOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'AI can take order'**
+  String get aiCanTakeOrder;
+
+  /// No description provided for @multiModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi Module'**
+  String get multiModule;
+
+  /// No description provided for @multiModuleAiAct.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi Module AI Act'**
+  String get multiModuleAiAct;
+
+  /// No description provided for @voiceToText.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice to Text'**
+  String get voiceToText;
+
+  /// No description provided for @userCanOrderInVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'User can Order in voice'**
+  String get userCanOrderInVoice;
+
+  /// No description provided for @billGenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Bill Generate'**
+  String get billGenerate;
+
+  /// No description provided for @aiCanGenerateBill.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Can Generate Bill'**
+  String get aiCanGenerateBill;
+
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// No description provided for @support.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get support;
+
+  /// No description provided for @stayUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay Updated'**
+  String get stayUpdated;
+
+  /// No description provided for @notifyWhenReady.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll notify you when new features are ready'**
+  String get notifyWhenReady;
+
+  /// No description provided for @aiChatModule.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat Module'**
+  String get aiChatModule;
+
+  /// No description provided for @loadingSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading settings...'**
+  String get loadingSettings;
+
+  /// No description provided for @failedToLoadSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load settings'**
+  String get failedToLoadSettings;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @darkThemeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark theme enabled'**
+  String get darkThemeEnabled;
+
+  /// No description provided for @lightThemeEnabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Light theme enabled'**
+  String get lightThemeEnabled;
+
+  /// No description provided for @darkModeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Change how the app looks. Dark mode is easier on the eyes in low light.'**
+  String get darkModeDescription;
+
+  /// No description provided for @appLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App Language'**
+  String get appLanguage;
+
+  /// No description provided for @choosePreferredLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred language'**
+  String get choosePreferredLanguage;
+
+  /// No description provided for @aiChatModel.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Chat Model'**
+  String get aiChatModel;
+
+  /// No description provided for @choosePreferredAiModel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred AI model'**
+  String get choosePreferredAiModel;
+
+  /// No description provided for @aiModelCapabilities.
+  ///
+  /// In en, this message translates to:
+  /// **'Different AI models may have varying capabilities and response styles.'**
+  String get aiModelCapabilities;
+
+  /// No description provided for @welcomeUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome User'**
+  String get welcomeUser;
+
+  /// No description provided for @aiAssistant.
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get aiAssistant;
+
+  /// No description provided for @messages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messages;
+
+  /// No description provided for @noName.
+  ///
+  /// In en, this message translates to:
+  /// **'No Name'**
+  String get noName;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

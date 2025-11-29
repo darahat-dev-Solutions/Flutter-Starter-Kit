@@ -211,4 +211,136 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get listening => 'Escuchando...';
+
+  @override
+  String get secondPage => 'Mensajes';
+
+  @override
+  String get chatAndMessages => 'Chat y Mensajes';
+
+  @override
+  String get thirdPage => 'Chat IA';
+
+  @override
+  String get aiChatAssistant => 'Asistente de Chat IA';
+
+  @override
+  String get helpCenterComingSoon => '¡Centro de ayuda próximamente!';
+
+  @override
+  String get dreamFlutterStarterKit => 'Kit de Inicio Dream Flutter';
+
+  @override
+  String get optionSecond => 'Mensajes';
+
+  @override
+  String get optionThird => 'Chat IA';
+
+  @override
+  String get readyToExplore => '¿Listo para explorar? 🚀';
+
+  @override
+  String get newFeaturesComingSoon => '¡Nuevas características próximamente!';
+
+  @override
+  String get workingOnExcitingUpdates => 'Estamos trabajando en actualizaciones emocionantes';
+
+  @override
+  String get aiChatFeatures => 'Características de Chat IA';
+
+  @override
+  String get currentlyUnderDevelopment => 'Actualmente en desarrollo';
+
+  @override
+  String get aiChatDescription => 'Estamos construyendo la opción de Chat IA donde la IA leerá tu REST API y responderá según los datos proporcionados';
+
+  @override
+  String get developmentProgress => 'Progreso de desarrollo';
+
+  @override
+  String get comingSoonFeatures => 'Características próximamente';
+
+  @override
+  String get giveOrder => 'Dar orden';
+
+  @override
+  String get aiCanTakeOrder => 'La IA puede tomar pedidos';
+
+  @override
+  String get multiModule => 'Multi Módulo';
+
+  @override
+  String get multiModuleAiAct => 'IA Multi Módulo';
+
+  @override
+  String get voiceToText => 'Voz a texto';
+
+  @override
+  String get userCanOrderInVoice => 'El usuario puede ordenar por voz';
+
+  @override
+  String get billGenerate => 'Generar factura';
+
+  @override
+  String get aiCanGenerateBill => 'La IA puede generar facturas';
+
+  @override
+  String get quickActions => 'Acciones rápidas';
+
+  @override
+  String get support => 'Soporte';
+
+  @override
+  String get stayUpdated => 'Mantente actualizado';
+
+  @override
+  String get notifyWhenReady => 'Te notificaremos cuando las nuevas características estén listas';
+
+  @override
+  String get aiChatModule => 'Módulo de Chat IA';
+
+  @override
+  String get loadingSettings => 'Cargando configuración...';
+
+  @override
+  String get failedToLoadSettings => 'Error al cargar la configuración';
+
+  @override
+  String get tryAgain => 'Intentar de nuevo';
+
+  @override
+  String get darkThemeEnabled => 'Tema oscuro activado';
+
+  @override
+  String get lightThemeEnabled => 'Tema claro activado';
+
+  @override
+  String get darkModeDescription => 'Cambia el aspecto de la aplicación. El modo oscuro es más fácil para los ojos con poca luz.';
+
+  @override
+  String get appLanguage => 'Idioma de la aplicación';
+
+  @override
+  String get choosePreferredLanguage => 'Elige tu idioma preferido';
+
+  @override
+  String get aiChatModel => 'Modelo de Chat IA';
+
+  @override
+  String get choosePreferredAiModel => 'Elige tu modelo de IA preferido';
+
+  @override
+  String get aiModelCapabilities => 'Los diferentes modelos de IA pueden tener capacidades y estilos de respuesta variables.';
+
+  @override
+  String get welcomeUser => 'Bienvenido Usuario';
+
+  @override
+  String get aiAssistant => 'Asistente IA';
+
+  @override
+  String get messages => 'Mensajes';
+
+  @override
+  String get noName => 'Sin nombre';
 }

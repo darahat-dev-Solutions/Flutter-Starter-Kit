@@ -1,9 +1,10 @@
+import 'package:ai_chat/core/utils/logger.dart';
+import 'package:ai_chat/features/auth/application/auth_state.dart';
 import 'package:ai_chat/features/auth/provider/auth_providers.dart';
-import 'package:ai_chat/features/home/presentation/widgets/user_profile_header.dart';
-import 'package:ai_chat/features/home/provider/home_provider.dart';
 import 'package:ai_chat/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// HomeDrawer for side drawer
 class HomeDrawer extends ConsumerWidget {
@@ -13,6 +14,7 @@ class HomeDrawer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final logger = ref.watch(appLoggerProvider);
 
     return Drawer(
       // Explicitly set the background color to ensure it's applied
@@ -29,10 +31,50 @@ class HomeDrawer extends ConsumerWidget {
                 bottom: BorderSide(color: theme.dividerColor, width: 1),
               ),
             ),
-            child: const SafeArea(
+            child: SafeArea(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: UserProfileHeader(),
+                padding: const EdgeInsets.all(16.0),
+                child: Consumer(
+                  builder: (context, ref, _) {
+                    final authState = ref.watch(authControllerProvider);
+                    if (authState is Authenticated) {
+                      final user = authState.user;
+                      // logger.error(user.displayName ?? '');
+
+                      return Row(
+                        children: [
+                          // User avatar
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundImage: user.photoURL != null
+                                ? NetworkImage(user.photoURL!)
+                                : null,
+                            backgroundColor: Colors.grey[300],
+                            child: user.photoURL == null
+                                ? const Icon(Icons.person, size: 36)
+                                : null,
+                          ),
+                          const SizedBox(width: 16),
+
+                          // User name
+                          Expanded(
+                            child: Text(
+                              user.displayName ??
+                                  AppLocalizations.of(context)!.noName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
               ),
             ),
           ),
@@ -46,6 +88,22 @@ class HomeDrawer extends ConsumerWidget {
                 children: [
                   ListTile(
                     leading: Icon(
+                      Icons.settings,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    title: Text(
+                      AppLocalizations.of(context)!.settings,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    onTap: () {
+                      if (!context.mounted) return;
+                      context.push('/settings');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
                       Icons.home,
                       color: theme.colorScheme.onSurface,
                     ),
@@ -56,8 +114,10 @@ class HomeDrawer extends ConsumerWidget {
                       ),
                     ),
                     onTap: () {
-                      ref.read(homeControllerProvider.notifier).changeTab(0);
-                      Navigator.pop(context);
+                      if (!context.mounted) return;
+                      // ref.read(homeControllerProvider.notifier).changeTab(0);
+                      // context.pop(); // Close the drawer
+                      context.go('/home'); // go back to home
                     },
                   ),
                   ListTile(
@@ -68,14 +128,16 @@ class HomeDrawer extends ConsumerWidget {
                     title: Text(
                       AppLocalizations.of(
                         context,
-                      )!.logout, // Fixed typo from 'Logot'
+                      )!
+                          .logout, // Fixed typo from 'Logot'
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface,
                       ),
                     ),
-                    onTap: () {
-                      ref.read(authControllerProvider.notifier).signOut();
-                      Navigator.pop(context);
+                    onTap: () async {
+                      await ref.read(authControllerProvider.notifier).signOut();
+                      if (!context.mounted) return;
+                      context.go('/login');
                     },
                   ),
                 ],

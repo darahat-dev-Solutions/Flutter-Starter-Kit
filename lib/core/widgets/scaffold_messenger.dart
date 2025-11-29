@@ -14,7 +14,6 @@ void scaffoldMessenger(BuildContext context, next) {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       backgroundColor: Theme.of(context).primaryColor,
       elevation: 6.0,
-
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
         label: 'Dismiss',

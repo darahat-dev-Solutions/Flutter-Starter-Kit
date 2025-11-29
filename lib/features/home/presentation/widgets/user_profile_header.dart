@@ -1,3 +1,4 @@
+import 'package:ai_chat/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Side Navigation bar UserProfile Header class
@@ -14,10 +15,13 @@ class UserProfileHeader extends StatelessWidget {
         CircleAvatar(radius: 30, child: Icon(Icons.person, size: 40)),
         SizedBox(height: 10),
         Text(
-          'Welcome User',
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 18),
+          AppLocalizations.of(context)!.welcomeUser,
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary, fontSize: 18),
         ),
-        Text('user@example.com', style: TextStyle(color: Theme.of(context).colorScheme.onPrimary.withAlpha(178))),
+        Text('user@example.com',
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary.withAlpha(178))),
       ],
     );
   }
