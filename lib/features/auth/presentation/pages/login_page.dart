@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter_kit/core/widgets/scaffold_messenger.dart';
+import 'package:flutter_starter_kit/features/auth/application/auth_controller.dart';
 import 'package:flutter_starter_kit/features/auth/application/auth_state.dart';
 import 'package:flutter_starter_kit/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../provider/auth_providers.dart';
+import '../widgets/auth_button.dart' hide AuthMethod;
+import '../widgets/login_form_field.dart';
+import '../widgets/login_header.dart';
 
-/// Login Page Presentation
 class LoginPage extends ConsumerStatefulWidget {
-  /// Login Page Constructor
-
   const LoginPage({super.key});
 
   @override
@@ -18,38 +19,36 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  AuthMethod _currentAuthMethod = AuthMethod.none;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final controller = ref.watch(authControllerProvider.notifier);
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState is AuthLoading;
-    final obscureText = ref.watch(obscureTextProvider);
 
     ref.listen<AuthState>(authControllerProvider, (previous, next) {
       if (next is AuthError) {
-        _currentAuthMethod = AuthMethod.none;
+        ref.read(_currentAuthMethodProvider.notifier).state = AuthMethod.none;
         scaffoldMessenger(context, next);
       }
       if (next is Authenticated) {
-        _currentAuthMethod = AuthMethod.none;
+        ref.read(_currentAuthMethodProvider.notifier).state = AuthMethod.none;
         context.go('/home', extra: {'title': 'Home'});
       }
     });
 
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Stack(
           children: [
@@ -58,314 +57,237 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40),
-                  Text(
-                    '${AppLocalizations.of(context)!.welcome} Back',
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    AppLocalizations.of(context)!.signInToContinue,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                  ),
-                  const SizedBox(height: 40),
+                  const LoginHeader(),
+
+                  // Login Form
                   Form(
                     key: _formKey,
                     child: Column(
                       children: [
-                        TextFormField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.email,
-                            prefixIcon: Icon(
-                              Icons.email_outlined,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
+                        LoginFormField(
+                          controller: _emailController,
+                          labelText: l10n.email,
+                          prefixIcon: Icons.email_outlined,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(
-                                context,
-                              )!
-                                  .pleaseEnterYourEmail;
+                              return l10n.pleaseEnterYourEmail;
                             }
                             if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                              return AppLocalizations.of(
-                                context,
-                              )!
-                                  .pleaseEnterAValidEmailAddress;
+                              return l10n.pleaseEnterAValidEmailAddress;
                             }
                             return null;
                           },
                           keyboardType: TextInputType.emailAddress,
-                          autocorrect: false,
                         ),
                         const SizedBox(height: 20),
-                        TextFormField(
-                          controller: passwordController,
-                          obscureText: obscureText,
-                          decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context)!.password,
-                            prefixIcon: Icon(
-                              Icons.lock_outline,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                obscureText
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                              onPressed: () {
-                                ref.read(obscureTextProvider.notifier).state =
-                                    !obscureText;
-                              },
-                            ),
-                          ),
+                        LoginFormField(
+                          controller: _passwordController,
+                          labelText: l10n.password,
+                          prefixIcon: Icons.lock_outline,
+                          showObscureToggle: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return AppLocalizations.of(
-                                context,
-                              )!
-                                  .pleaseEnterYourPassword;
+                              return l10n.pleaseEnterYourPassword;
                             }
                             if (value.length < 6) {
-                              return AppLocalizations.of(
-                                context,
-                              )!
-                                  .passwordMustBeAtLeast6Characters;
+                              return l10n.passwordMustBeAtLeast6Characters;
                             }
                             return null;
                           },
                         ),
                         const SizedBox(height: 16),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: isLoading
-                                ? null
-                                : () {
-                                    context.go('/forget_password');
-                                  },
-                            child: Text(
-                              AppLocalizations.of(context)!.forgotPassword,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                            ),
-                          ),
-                        ),
+
+                        // Links
+                        _buildLinksSection(context, l10n, isLoading),
                         const SizedBox(height: 24),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isLoading &&
-                                    _currentAuthMethod != AuthMethod.email
-                                ? null
-                                : () {
-                                    if (_formKey.currentState!.validate()) {
-                                      setState(() {
-                                        _currentAuthMethod = AuthMethod.email;
-                                      });
-                                      controller.signIn(
-                                        emailController.text.trim(),
-                                        passwordController.text.trim(),
-                                      );
-                                    }
-                                  },
-                            child: _currentAuthMethod == AuthMethod.email &&
-                                    isLoading
-                                ? SizedBox(
-                                    height: 24,
-                                    width: 24,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onPrimary,
-                                    ),
-                                  )
-                                : Text(
-                                    AppLocalizations.of(context)!.signIn,
-                                  ),
-                          ),
+
+                        // Email Sign In Button
+                        AuthButton(
+                          authMethod: AuthMethod.email,
+                          isLoading: isLoading,
+                          onPressed: () => _handleEmailSignIn(controller),
+                          text: l10n.signIn,
+                          isPrimary: true,
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          AppLocalizations.of(context)!.or,
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                    ],
-                  ),
+
+                  // Divider
+                  _buildDivider(context, l10n),
                   const SizedBox(height: 24),
-                  OutlinedButton(
-                    onPressed:
-                        isLoading && _currentAuthMethod != AuthMethod.google
-                            ? null
-                            : () async {
-                                setState(() {
-                                  _currentAuthMethod = AuthMethod.google;
-                                });
-                                await controller.signInWithGoogle();
-                              },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icon/google_logo.png',
-                          height: 24,
-                          width: 24,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(
-                            context,
-                          )!
-                              .continueWithGoogle,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  OutlinedButton(
-                    onPressed: isLoading
-                        ? null
-                        : () {
-                            context.go('/phone-number');
-                          },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.phone,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(context)!.continueWithPhone,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
+
+                  // Social Auth Buttons
+                  _buildSocialAuthSection(context, l10n, controller, isLoading),
                   const SizedBox(height: 32),
-                  OutlinedButton(
-                    onPressed:
-                        isLoading && _currentAuthMethod != AuthMethod.github
-                            ? null
-                            : () async {
-                                setState(() {
-                                  _currentAuthMethod = AuthMethod.github;
-                                });
-                                await controller.signInWithGithub();
-                              },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/icon/github_logo.png',
-                          height: 24,
-                          width: 24,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(
-                            context,
-                          )!
-                              .continueWithGithub,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                  Center(
-                    child: TextButton(
-                      onPressed:
-                          isLoading ? null : () => context.go('/register'),
-                      child: RichText(
-                        text: TextSpan(
-                          text: AppLocalizations.of(context)!.dontHaveAnAccount,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          children: [
-                            TextSpan(
-                              text: AppLocalizations.of(context)!.signUp,
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
-            if (isLoading)
-              Container(
-                color: Theme.of(context).colorScheme.scrim.withAlpha(77),
-                child: const Center(child: CircularProgressIndicator()),
-              ),
+
+            // Loading Overlay
+            if (isLoading) _buildLoadingOverlay(context),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildLinksSection(
+      BuildContext context, AppLocalizations l10n, bool isLoading) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+          child: TextButton(
+            onPressed: isLoading ? null : () => context.go('/register'),
+            child: Text.rich(
+              TextSpan(
+                text: '${l10n.dontHaveAnAccount} ',
+                style: Theme.of(context).textTheme.bodySmall,
+                children: [
+                  TextSpan(
+                    text: l10n.signUp,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Flexible(
+          child: TextButton(
+            onPressed: isLoading ? null : () => context.go('/forget_password'),
+            child: Text(
+              l10n.forgotPassword,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildDivider(BuildContext context, AppLocalizations l10n) {
+    return Row(
+      children: [
+        Expanded(
+          child: Divider(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            l10n.or,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+          ),
+        ),
+        Expanded(
+          child: Divider(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialAuthSection(
+    BuildContext context,
+    AppLocalizations l10n,
+    AuthController controller,
+    bool isLoading,
+  ) {
+    return Column(
+      children: [
+        // Google
+        AuthButton(
+          authMethod: AuthMethod.google,
+          isLoading: isLoading,
+          onPressed: () async {
+            ref.read(_currentAuthMethodProvider.notifier).state =
+                AuthMethod.google;
+            await controller.signInWithGoogle();
+          },
+          text: l10n.continueWithGoogle,
+          icon: Image.asset(
+            'assets/icon/google_logo.png',
+            height: 24,
+            width: 24,
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // Phone
+        OutlinedButton(
+          onPressed: isLoading ? null : () => context.go('/phone-number'),
+          style: OutlinedButton.styleFrom(
+            side: BorderSide(color: Theme.of(context).colorScheme.outline),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.phone_outlined,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                l10n.continueWithPhone,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        // GitHub
+        AuthButton(
+          authMethod: AuthMethod.github,
+          isLoading: isLoading,
+          onPressed: () async {
+            ref.read(_currentAuthMethodProvider.notifier).state =
+                AuthMethod.github;
+            await controller.signInWithGithub();
+          },
+          text: l10n.continueWithGithub,
+          icon: Image.asset(
+            'assets/icon/github_logo.png',
+            height: 24,
+            width: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingOverlay(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.scrim.withOpacity(0.2),
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  void _handleEmailSignIn(AuthController controller) {
+    if (_formKey.currentState!.validate()) {
+      ref.read(_currentAuthMethodProvider.notifier).state = AuthMethod.email;
+      controller.signIn(
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+    }
+  }
 }
+
+final _currentAuthMethodProvider =
+    StateProvider<AuthMethod>((ref) => AuthMethod.none);

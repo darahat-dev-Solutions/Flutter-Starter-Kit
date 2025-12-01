@@ -7,7 +7,9 @@ void scaffoldMessenger(BuildContext context, next) {
     SnackBar(
       content: Text(
         next.message,
-        style: Theme.of(context).textTheme.labelMedium,
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
+              color: Colors.white,
+            ),
       ),
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(16.0),
@@ -17,7 +19,7 @@ void scaffoldMessenger(BuildContext context, next) {
       duration: const Duration(seconds: 3),
       action: SnackBarAction(
         label: 'Dismiss',
-        textColor: Theme.of(context).colorScheme.onPrimary,
+        textColor: Colors.white,
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
