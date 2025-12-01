@@ -111,5 +111,18 @@
   "welcomeUser": "Welcome User",
   "aiAssistant": "AI Assistant",
   "messages": "Messages",
-  "noName": "No Name"
+  "noName": "No Name",
+  "payment": "Payment",
+  "paymentMethods": "Payment Methods",
+  "creditCard": "Credit Card",
+  "payWithCreditCard": "Pay with credit or debit card",
+  "debitCard": "Debit Card",
+  "payWithDebitCard": "Pay directly from your bank account",
+  "bankTransfer": "Bank Transfer",
+  "payViaBankTransfer": "Pay via direct bank transfer",
+  "mobileMoney": "Mobile Money",
+  "payWithMobileMoney": "Pay with mobile money services",
+  "transactionHistory": "Transaction History",
+  "noTransactionsYet": "No transactions yet",
+  "pay": "Pay"
 }

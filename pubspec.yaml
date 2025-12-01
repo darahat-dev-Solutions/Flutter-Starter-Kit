@@ -71,6 +71,8 @@ dependencies:
   provider: ^6.1.2
   mocktail: ^1.0.3
   riverpod_test: ^0.1.4
+  flutter_stripe: ^11.5.0
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:

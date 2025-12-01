@@ -111,5 +111,18 @@
   "welcomeUser": "ようこそユーザー",
   "aiAssistant": "AIアシスタント",
   "messages": "メッセージ",
-  "noName": "名前なし"
+  "noName": "名前なし",
+  "payment": "支払い",
+  "paymentMethods": "支払い方法",
+  "creditCard": "クレジットカード",
+  "payWithCreditCard": "クレジットカードまたはデビットカードで支払う",
+  "debitCard": "デビットカード",
+  "payWithDebitCard": "銀行口座から直接支払う",
+  "bankTransfer": "銀行振込",
+  "payViaBankTransfer": "直接銀行振込で支払う",
+  "mobileMoney": "モバイルマネー",
+  "payWithMobileMoney": "モバイルマネーサービスで支払う",
+  "transactionHistory": "取引履歴",
+  "noTransactionsYet": "まだ取引がありません",
+  "pay": "支払う"
 }

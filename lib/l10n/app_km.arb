@@ -111,5 +111,18 @@
   "welcomeUser": "សូមស្វាគមន៍អ្នកប្រើប្រាស់",
   "aiAssistant": "ជំនួយការ AI",
   "messages": "សារ",
-  "noName": "គ្មានឈ្មោះ"
+  "noName": "គ្មានឈ្មោះ",
+  "payment": "ការទូទាត់",
+  "paymentMethods": "វិធីសាស្ត្រទូទាត់",
+  "creditCard": "កាតឥណទាន",
+  "payWithCreditCard": "បង់ប្រាក់ដោយកាតឥណទាន ឬកាតឥណពន្ធ",
+  "debitCard": "កាតឥណពន្ធ",
+  "payWithDebitCard": "បង់ប្រាក់ពីគណនីធនាគាររបស់អ្នក",
+  "bankTransfer": "ផ្ទេរប្រាក់ធនាគារ",
+  "payViaBankTransfer": "បង់ប្រាក់តាមរយៈការផ្ទេរប្រាក់ធនាគារ",
+  "mobileMoney": "លុយទូរស័ព្ទ",
+  "payWithMobileMoney": "បង់ប្រាក់ដោយសេវាលុយទូរស័ព្ទ",
+  "transactionHistory": "ប្រវត្តិប្រតិបត្តិការ",
+  "noTransactionsYet": "មិនទាន់មានប្រតិបត្តិការ",
+  "pay": "បង់ប្រាក់"
 }

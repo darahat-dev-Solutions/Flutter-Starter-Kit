@@ -770,6 +770,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Name'**
   String get noName;
+
+  /// No description provided for @payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// No description provided for @paymentMethods.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Methods'**
+  String get paymentMethods;
+
+  /// No description provided for @creditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Credit Card'**
+  String get creditCard;
+
+  /// No description provided for @payWithCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with credit or debit card'**
+  String get payWithCreditCard;
+
+  /// No description provided for @debitCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Debit Card'**
+  String get debitCard;
+
+  /// No description provided for @payWithDebitCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay directly from your bank account'**
+  String get payWithDebitCard;
+
+  /// No description provided for @bankTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Transfer'**
+  String get bankTransfer;
+
+  /// No description provided for @payViaBankTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay via direct bank transfer'**
+  String get payViaBankTransfer;
+
+  /// No description provided for @mobileMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Money'**
+  String get mobileMoney;
+
+  /// No description provided for @payWithMobileMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with mobile money services'**
+  String get payWithMobileMoney;
+
+  /// No description provided for @transactionHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction History'**
+  String get transactionHistory;
+
+  /// No description provided for @noTransactionsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No transactions yet'**
+  String get noTransactionsYet;
+
+  /// No description provided for @pay.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay'**
+  String get pay;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

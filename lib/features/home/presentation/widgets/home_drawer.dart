@@ -88,6 +88,22 @@ class HomeDrawer extends ConsumerWidget {
                 children: [
                   ListTile(
                     leading: Icon(
+                      Icons.payment,
+                      color: theme.colorScheme.onSurface,
+                    ),
+                    title: Text(
+                      AppLocalizations.of(context)!.payment,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface,
+                      ),
+                    ),
+                    onTap: () {
+                      if (!context.mounted) return;
+                      context.push('/payment');
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(
                       Icons.settings,
                       color: theme.colorScheme.onSurface,
                     ),

@@ -15,6 +15,7 @@ import 'package:flutter_starter_kit/features/home/presentation/layout/home_layou
 import 'package:flutter_starter_kit/features/home/presentation/pages/home_page.dart';
 import 'package:flutter_starter_kit/features/home/presentation/pages/second_page.dart';
 import 'package:flutter_starter_kit/features/home/presentation/pages/third_page.dart';
+import 'package:flutter_starter_kit/features/payment/presentation/pages/payment_page.dart';
 import 'package:flutter_starter_kit/splashscreen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,6 +48,7 @@ final initializationFutureProvider = FutureProvider<void>((ref) async {
 final Map<String, List<UserRole>> routeAllowedRoles = {
   '/home': [UserRole.authenticatedUser, UserRole.admin],
   '/settings': [UserRole.authenticatedUser, UserRole.admin],
+  '/payment': [UserRole.authenticatedUser, UserRole.admin],
   '/login': [UserRole.guest],
   '/register': [UserRole.guest],
   // Add all your routes here with their allowed roles
@@ -91,6 +93,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const SettingsPage(),
+      ),
+      // Top-level route for payment
+      GoRoute(
+        path: '/payment',
+        name: 'payment',
+        builder: (context, state) => const PaymentPage(),
       ),
       GoRoute(
         path: '/login',

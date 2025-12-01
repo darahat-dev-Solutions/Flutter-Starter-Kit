@@ -1,17 +1,31 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/core/usecases/usecase.dart';
 import 'package:flutter_starter_kit/core/utils/logger.dart';
 import 'package:hive/hive.dart';
 
+import '../domain/usecases/forgot_password_usecase.dart';
+import '../domain/usecases/sign_in_usecase.dart';
+import '../domain/usecases/sign_in_with_github_usecase.dart';
+import '../domain/usecases/sign_in_with_google_usecase.dart';
+import '../domain/usecases/sign_out_usecase.dart';
+import '../domain/usecases/sign_up_usecase.dart';
 import '../domain/user_model.dart';
 import '../infrastructure/auth_repository.dart';
 import 'auth_state.dart';
 
-/// A controller class which manages user authentication
+/// A controller class which manages user authentication using Clean Architecture with UseCases
 class AuthController extends StateNotifier<AuthState> {
   /// Required instances
-  final AuthRepository _authRepository;
   final Box<UserModel> _authBox;
+  final AuthRepository _authRepository;
+
+  /// Use cases
+  final SignInUseCase _signInUseCase;
+  final SignUpUseCase _signUpUseCase;
+  final SignInWithGoogleUseCase _signInWithGoogleUseCase;
+  final SignInWithGithubUseCase _signInWithGithubUseCase;
+  final ForgotPasswordUseCase _forgotPasswordUseCase;
+  final SignOutUseCase _signOutUseCase;
 
   /// Required references and variables
   final Ref ref;
@@ -20,8 +34,18 @@ class AuthController extends StateNotifier<AuthState> {
   final AppLogger _appLogger;
 
   /// AuthController Constructor
-  AuthController(this._authRepository, this._authBox, this.ref, this._appLogger)
-      : super(const AuthInitial());
+  AuthController(
+    this._authBox,
+    this.ref,
+    this._appLogger,
+    this._signInUseCase,
+    this._signUpUseCase,
+    this._signInWithGoogleUseCase,
+    this._signInWithGithubUseCase,
+    this._forgotPasswordUseCase,
+    this._signOutUseCase,
+    this._authRepository,
+  ) : super(const AuthInitial());
 
   /// Check User is Authenticated need to call in main to check
   void checkInitialAuthState() async {
@@ -49,116 +73,97 @@ class AuthController extends StateNotifier<AuthState> {
   /// Maintain Email & Password SignUp
   Future<void> signUp(String email, String password, String name) async {
     state = const AuthLoading();
-    try {
-      final user = await _authRepository.signUp(email, password, name);
-      if (user != null) {
-        state = Authenticated(user);
-      } else {
-        state = const AuthError(
-          ' Sign up failed. Please try again.',
-          AuthMethod.signup,
-        );
-      }
-    } catch (e) {
-      state = AuthError('Sign up failed. Please Try Again', AuthMethod.signup);
-    }
+
+    final result = await _signUpUseCase.call(
+      SignUpParams(email: email, password: password, name: name),
+    );
+
+    result.fold(
+      (failure) => state = AuthError(failure.message, AuthMethod.signup),
+      (user) => state = Authenticated(user),
+    );
   }
 
   /// Maintain Email & Password SignIn
   Future<void> signIn(String email, String password) async {
     state = const AuthLoading();
-    try {
-      final user = await _authRepository.signIn(email, password);
-      if (user != null) {
-        state = Authenticated(user);
-      } else {
-        state = const AuthError(
-          ' Sign in failed. Please try again.',
-          AuthMethod.email,
-        );
-      }
-    } catch (e) {
-      state = AuthError(e.toString(), AuthMethod.email);
-    }
+
+    final result = await _signInUseCase.call(
+      SignInParams(email: email, password: password),
+    );
+
+    result.fold(
+      (failure) => state = AuthError(failure.message, AuthMethod.email),
+      (user) => state = Authenticated(user),
+    );
   }
 
   /// Maintain Google SignIn
   Future<void> signInWithGoogle() async {
     state = const AuthLoading();
-    try {
-      final user = await _authRepository.signInWithGoogle();
-      if (user != null) {
+
+    final result = await _signInWithGoogleUseCase.call(const NoParams());
+
+    result.fold(
+      (failure) => state = AuthError(failure.message, AuthMethod.google),
+      (user) {
         state = Authenticated(user);
-        _appLogger.error('Check what the state status ${state.uid.toString()}');
-        _appLogger.error('Check the display name ${user.uid}');
-      } else {
-        state = const AuthError(
-          'Google Sign in failed. Please try again.',
-          AuthMethod.google,
-        );
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        state = const AuthError(
-          'An account already exists with this email. Please sign in using the provider associated with this email address',
-          AuthMethod.google,
-        );
-      }
-    } catch (e) {
-      state = AuthError(e.toString(), AuthMethod.google);
-    }
+        _appLogger.debug('Google sign in successful: ${user.displayName}');
+      },
+    );
   }
 
-  /// Maintain Google SignIn
+  /// Maintain Github SignIn
   Future<void> signInWithGithub() async {
     state = const AuthLoading();
-    try {
-      final user = await _authRepository.signInWithGithub();
-      if (user != null) {
+
+    final result = await _signInWithGithubUseCase.call(const NoParams());
+
+    result.fold(
+      (failure) => state = AuthError(failure.message, AuthMethod.github),
+      (user) {
         state = Authenticated(user);
-      }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'account-exists-with-different-credential') {
-        state = const AuthError(
-          'An account already exists with this email. Please sign in using the provider associated with this email address',
-          AuthMethod.github,
-        );
-      }
-    } catch (e) {
-      state = AuthError(e.toString(), AuthMethod.github);
-    }
+        _appLogger.debug('Github sign in successful: ${user.displayName}');
+      },
+    );
   }
 
   /// Send Forget Password reset mail
   Future<void> sendPasswordResetEmail(String email) async {
     state = const AuthLoading();
-    try {
-      await _authRepository.sendPasswordResetEmail(email);
-      state = const PasswordResetEmailSent();
-      Future.delayed(
-        const Duration(seconds: 1),
-        () => state = const AuthInitial(),
-      );
-    } catch (e) {
-      state = AuthError(
-        'Failed to send reset Email . ${e.toString()}',
-        AuthMethod.email,
-      );
-    }
+
+    final result = await _forgotPasswordUseCase.call(
+      ForgotPasswordParams(email: email),
+    );
+
+    result.fold(
+      (failure) => state = AuthError(failure.message, AuthMethod.email),
+      (_) {
+        state = const PasswordResetEmailSent();
+        Future.delayed(
+          const Duration(seconds: 1),
+          () => state = const AuthInitial(),
+        );
+      },
+    );
   }
 
   ///Maintain Sign out
   Future<void> signOut() async {
     state = const AuthLoading();
-    try {
-      await _authRepository.signOut();
-      await _authBox.clear();
-      await _authBox.delete('user');
-      // Assuming goRouterProvider exists
-      state = const AuthInitial();
-    } catch (e, s) {
-      _appLogger.error('App logger from signout $e \n $s');
-    }
+
+    final result = await _signOutUseCase.call(const NoParams());
+
+    result.fold(
+      (failure) {
+        _appLogger.error('Sign out failed: ${failure.message}');
+        state = AuthError(failure.message, AuthMethod.none);
+      },
+      (_) {
+        state = const AuthInitial();
+        _appLogger.debug('Sign out successful');
+      },
+    );
   }
 
   /// Maintain Phone authentication Sending OTP

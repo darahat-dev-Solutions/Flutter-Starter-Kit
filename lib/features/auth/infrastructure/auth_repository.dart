@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_starter_kit/core/errors/exceptions.dart';
+import 'package:flutter_starter_kit/core/errors/failures.dart';
+import 'package:flutter_starter_kit/core/errors/result.dart';
 import 'package:flutter_starter_kit/core/services/hive_service.dart'; // Import HiveService
 import 'package:flutter_starter_kit/core/utils/logger.dart';
 import 'package:flutter_starter_kit/firebase_options.dart';
@@ -32,26 +34,38 @@ class AuthRepository {
   AuthRepository(this._hiveService, this._appLogger);
 
   /// Creates User With Email and Password
-  Future<UserModel?> signUp(String email, String password, String name) async {
-    final cred = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    await _saveUserData(
-      cred.user!,
-      cred.user!.displayName ?? cred.user!.email ?? '',
-      cred.user!.photoURL ?? '',
-    );
-    return UserModel(
-      uid: cred.user!.uid,
-      email: cred.user!.email ?? '',
-      displayName: cred.user!.displayName ?? cred.user!.email ?? '',
-      photoURL: cred.user!.photoURL ?? '',
-    );
+  Future<Result<UserModel, Failure>> signUp(
+      String email, String password, String name) async {
+    try {
+      final cred = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await _saveUserData(
+        cred.user!,
+        cred.user!.displayName ?? cred.user!.email ?? '',
+        cred.user!.photoURL ?? '',
+      );
+      final user = UserModel(
+        uid: cred.user!.uid,
+        email: cred.user!.email ?? '',
+        displayName: cred.user!.displayName ?? cred.user!.email ?? '',
+        photoURL: cred.user!.photoURL ?? '',
+      );
+      return Success(user);
+    } on FirebaseAuthException catch (e) {
+      _appLogger.error('🚀 ~ Sign up error', e);
+      return ResultFailure(AuthFailure(message: e.message ?? 'Sign up failed'));
+    } catch (e) {
+      _appLogger.error('🚀 ~ Sign up error', e);
+      return const ResultFailure(
+          AuthFailure(message: 'Sign up failed. Please try again'));
+    }
   }
 
   /// Sign in with Email and Password
-  Future<UserModel?> signIn(String email, String password) async {
+  Future<Result<UserModel, Failure>> signIn(
+      String email, String password) async {
     try {
       final cred = await _auth.signInWithEmailAndPassword(
         email: email,
@@ -62,29 +76,33 @@ class AuthRepository {
         cred.user!.displayName ?? cred.user!.email ?? '',
         cred.user!.photoURL ?? '',
       );
-      return UserModel(
+      final user = UserModel(
         uid: cred.user!.uid,
         email: cred.user!.email ?? '',
         photoURL: cred.user!.photoURL ?? '',
       );
+      return Success(user);
     } on FirebaseAuthException catch (e) {
+      _appLogger.error('🚀 ~ Sign in error', e);
       if (e.code == 'account-exists-with-different-credential') {
-        throw const AuthenticationException(
-          '🚀 ~An account already exists with this email. Please sign in using the provider associated with this email address',
-        );
+        return const ResultFailure(AuthFailure(
+          message:
+              'An account already exists with this email. Please sign in using the provider associated with this email address',
+        ));
       } else {
-        /// Handle other Firebase-specific errors
-        throw const AuthenticationException('Sign in failed. Please try again');
+        return ResultFailure(AuthFailure(
+            message: e.message ?? 'Sign in failed. Please try again'));
       }
     } catch (e) {
-      throw AuthenticationException(
-        '🚀 ~ Email or Password Combination not Match',
-      );
+      _appLogger.error('🚀 ~ Sign in error', e);
+      return const ResultFailure(AuthFailure(
+        message: 'Email or Password combination does not match',
+      ));
     }
   }
 
   /// Sign in with Google
-  Future<UserModel?> signInWithGoogle() async {
+  Future<Result<UserModel, Failure>> signInWithGoogle() async {
     try {
       // Initialize GoogleSignIn with serverClientId for Android
       await GoogleSignIn.instance.initialize(
@@ -104,31 +122,33 @@ class AuthRepository {
         cred.user!.displayName ?? cred.user!.email ?? '',
         cred.user!.photoURL ?? '',
       );
-      return UserModel(
+      final user = UserModel(
         uid: cred.user!.uid,
         email: cred.user!.email ?? '',
         displayName: cred.user!.displayName ?? cred.user!.email ?? '',
         photoURL: cred.user!.photoURL ?? '',
       );
+      return Success(user);
     } on FirebaseAuthException catch (e) {
+      _appLogger.error('🚀 ~ Google Sign-in error', e);
       if (e.code == 'account-exists-with-different-credential') {
-        throw const AuthenticationException(
-          '🚀 ~An account already exists with this email. Please sign in using the provider associated with this email address',
-        );
+        return const ResultFailure(AuthFailure(
+          message:
+              'An account already exists with this email. Please sign in using the provider associated with this email address',
+        ));
       } else {
-        /// Handle other Firebase-specific errors
-        throw const AuthenticationException(
-          'Google sign in failed. Please try again',
-        );
+        return ResultFailure(AuthFailure(
+            message: e.message ?? 'Google sign in failed. Please try again'));
       }
-    } catch (e, s) {
-      _appLogger.error('🚀 ~ Error during Google Sign-in $e and status is $s');
-      throw AuthenticationException('🚀 ~ Google Sign in failed $e');
+    } catch (e) {
+      _appLogger.error('🚀 ~ Error during Google Sign-in', e);
+      return const ResultFailure(
+          AuthFailure(message: 'Google Sign in failed. Please try again'));
     }
   }
 
   /// Sign in With GitHub
-  Future<UserModel?> signInWithGithub() async {
+  Future<Result<UserModel, Failure>> signInWithGithub() async {
     try {
       final githubAuthProvider = GithubAuthProvider();
       UserCredential cred;
@@ -142,50 +162,56 @@ class AuthRepository {
         cred.user!.displayName ?? cred.user!.email ?? '',
         cred.user!.photoURL ?? '',
       );
-      return UserModel(
+      final user = UserModel(
         uid: cred.user!.uid,
         email: cred.user!.email ?? '',
         displayName: cred.user!.displayName ?? cred.user!.email ?? '',
         photoURL: cred.user!.photoURL ?? '',
       );
+      return Success(user);
     } on FirebaseAuthException catch (e) {
+      _appLogger.error('🚀 ~ Github Sign-in error', e);
       if (e.code == 'account-exists-with-different-credential') {
-        throw const AuthenticationException(
-          '🚀 ~An account already exists with this email. Please sign in using the provider associated with this email address',
-        );
+        return const ResultFailure(AuthFailure(
+          message:
+              'An account already exists with this email. Please sign in using the provider associated with this email address',
+        ));
       } else {
-        /// Handle other Firebase-specific errors
-        throw const AuthenticationException(
-          'Github sign in failed. Please try again',
-        );
+        return ResultFailure(AuthFailure(
+            message: e.message ?? 'Github sign in failed. Please try again'));
       }
     } catch (e) {
       _appLogger.error('🚀 ~ Error during Github Sign-in', e);
-      throw const AuthenticationException(
-        '🚀 ~Failed to sign in with GitHub. Please try again.',
-      );
+      return const ResultFailure(AuthFailure(
+        message: 'Failed to sign in with GitHub. Please try again.',
+      ));
     }
   }
 
   /// Send Password Reset Email
-  Future<void> sendPasswordResetEmail(String email) async {
+  Future<Result<void, Failure>> sendPasswordResetEmail(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
+      return const Success(null);
     } catch (e) {
       _appLogger.error('🚀 ~ sendPasswordResetEmail Error', e);
-      throw const AuthenticationException(
-        '🚀 ~Failed to send Password Reset Email',
-      );
+      return const ResultFailure(AuthFailure(
+        message: 'Failed to send Password Reset Email',
+      ));
     }
   }
 
   /// Sign Out Function
-  Future<void> signOut() async {
-    await _auth.signOut();
-    await GoogleSignIn.instance.signOut();
-    await _hiveService.clear();
-
-    // Redirect to login screen after logout
+  Future<Result<void, Failure>> signOut() async {
+    try {
+      await _auth.signOut();
+      await GoogleSignIn.instance.signOut();
+      await _hiveService.clear();
+      return const Success(null);
+    } catch (e) {
+      _appLogger.error('🚀 ~ Sign out error', e);
+      return const ResultFailure(AuthFailure(message: 'Failed to sign out'));
+    }
   }
 
   /// Send OTP Function for Sign up/Sign In using mobile phone number

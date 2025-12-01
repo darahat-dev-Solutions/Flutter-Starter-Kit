@@ -343,4 +343,43 @@ class AppLocalizationsKm extends AppLocalizations {
 
   @override
   String get noName => 'គ្មានឈ្មោះ';
+
+  @override
+  String get payment => 'ការទូទាត់';
+
+  @override
+  String get paymentMethods => 'វិធីសាស្ត្រទូទាត់';
+
+  @override
+  String get creditCard => 'កាតឥណទាន';
+
+  @override
+  String get payWithCreditCard => 'បង់ប្រាក់ដោយកាតឥណទាន ឬកាតឥណពន្ធ';
+
+  @override
+  String get debitCard => 'កាតឥណពន្ធ';
+
+  @override
+  String get payWithDebitCard => 'បង់ប្រាក់ពីគណនីធនាគាររបស់អ្នក';
+
+  @override
+  String get bankTransfer => 'ផ្ទេរប្រាក់ធនាគារ';
+
+  @override
+  String get payViaBankTransfer => 'បង់ប្រាក់តាមរយៈការផ្ទេរប្រាក់ធនាគារ';
+
+  @override
+  String get mobileMoney => 'លុយទូរស័ព្ទ';
+
+  @override
+  String get payWithMobileMoney => 'បង់ប្រាក់ដោយសេវាលុយទូរស័ព្ទ';
+
+  @override
+  String get transactionHistory => 'ប្រវត្តិប្រតិបត្តិការ';
+
+  @override
+  String get noTransactionsYet => 'មិនទាន់មានប្រតិបត្តិការ';
+
+  @override
+  String get pay => 'បង់ប្រាក់';
 }

@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter_kit/core/services/hive_service.dart';
 import 'package:flutter_starter_kit/firebase_options.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Initialization Service class
@@ -29,6 +30,7 @@ class InitializationService {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
     await Hive.initFlutter();
     if (dotenv.env['USE_FIREBASE_EMULATOR'] == 'true') {
       // For Android emulator use 10.0.2.2. for iOS use localhost.
@@ -47,6 +49,13 @@ class InitializationService {
     //   appleProvider: AppleProvider.appAttest,
     // );
     await ref.read(hiveServiceProvider).init();
+    String? stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'];
+
+    if (stripePublishableKey == null || stripePublishableKey.isEmpty) {
+      throw Exception('STRIPE_PUBLISHABLE_KEY is not set in .env file');
+    }
+
+    Stripe.publishableKey = stripePublishableKey;
   }
 }
 

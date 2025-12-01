@@ -343,4 +343,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noName => 'No Name';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get paymentMethods => 'Payment Methods';
+
+  @override
+  String get creditCard => 'Credit Card';
+
+  @override
+  String get payWithCreditCard => 'Pay with credit or debit card';
+
+  @override
+  String get debitCard => 'Debit Card';
+
+  @override
+  String get payWithDebitCard => 'Pay directly from your bank account';
+
+  @override
+  String get bankTransfer => 'Bank Transfer';
+
+  @override
+  String get payViaBankTransfer => 'Pay via direct bank transfer';
+
+  @override
+  String get mobileMoney => 'Mobile Money';
+
+  @override
+  String get payWithMobileMoney => 'Pay with mobile money services';
+
+  @override
+  String get transactionHistory => 'Transaction History';
+
+  @override
+  String get noTransactionsYet => 'No transactions yet';
+
+  @override
+  String get pay => 'Pay';
 }

@@ -23,10 +23,9 @@ class ServerFailure extends Failure {
   final int? statusCode;
 
   @override
-  String toString() =>
-      statusCode != null
-          ? 'Server error: $message (Status code: $statusCode)'
-          : 'Server error: $message';
+  String toString() => statusCode != null
+      ? 'Server error: $message (Status code: $statusCode)'
+      : 'Server error: $message';
 }
 
 /// Represents a failure that occurred when accessing local cache.
@@ -77,7 +76,7 @@ class ValidationFailure extends Failure {
 class NotFoundFailure extends Failure {
   /// Creates a [NotFoundFailure] with details about the resource that wasn't found.
   const NotFoundFailure({required this.resourceType, required this.identifier})
-    : super(message: '$resourceType with identifier $identifier not found');
+      : super(message: '$resourceType with identifier $identifier not found');
 
   /// The type of resource that wasn't found (e.g., "User", "Task").
   final String resourceType;
@@ -110,6 +109,29 @@ class PermissionFailure extends Failure {
   String toString() => 'Permission denied: $permission - $message';
 }
 
+/// Represents a failure during payment processing.
+class PaymentFailure extends Failure {
+  /// Creates a [PaymentFailure] with a message describing the payment error.
+  const PaymentFailure({required super.message, this.code});
+
+  /// Optional error code from payment provider
+  final String? code;
+
+  @override
+  String toString() => code != null
+      ? 'Payment error: $message (Code: $code)'
+      : 'Payment error: $message';
+}
+
+/// Represents an unexpected failure that doesn't fit other categories.
+class UnexpectedFailure extends Failure {
+  /// Creates an [UnexpectedFailure] with a message describing the unexpected error.
+  const UnexpectedFailure({required super.message});
+
+  @override
+  String toString() => 'Unexpected error: $message';
+}
+
 
 // return Left(CacheFailure(message: 'Cache error'));
 // return Left(NetworkFailure(message: 'No internet'));
@@ -117,3 +139,5 @@ class PermissionFailure extends Failure {
 // return Left(NotFoundFailure(resourceType: 'Task', identifier: '123'));
 // return Left(AuthFailure(message: 'Invalid credentials'));
 // return Left(PermissionFailure(permission: 'admin', message: 'Denied'));
+// return Left(PaymentFailure(message: 'Payment declined'));
+// return Left(UnexpectedFailure(message: 'Something went wrong'));

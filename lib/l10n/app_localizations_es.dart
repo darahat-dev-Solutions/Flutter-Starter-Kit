@@ -343,4 +343,43 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noName => 'Sin nombre';
+
+  @override
+  String get payment => 'Pago';
+
+  @override
+  String get paymentMethods => 'Métodos de pago';
+
+  @override
+  String get creditCard => 'Tarjeta de crédito';
+
+  @override
+  String get payWithCreditCard => 'Pagar con tarjeta de crédito o débito';
+
+  @override
+  String get debitCard => 'Tarjeta de débito';
+
+  @override
+  String get payWithDebitCard => 'Pagar directamente desde tu cuenta bancaria';
+
+  @override
+  String get bankTransfer => 'Transferencia bancaria';
+
+  @override
+  String get payViaBankTransfer => 'Pagar mediante transferencia bancaria directa';
+
+  @override
+  String get mobileMoney => 'Dinero móvil';
+
+  @override
+  String get payWithMobileMoney => 'Pagar con servicios de dinero móvil';
+
+  @override
+  String get transactionHistory => 'Historial de transacciones';
+
+  @override
+  String get noTransactionsYet => 'Aún no hay transacciones';
+
+  @override
+  String get pay => 'Pagar';
 }

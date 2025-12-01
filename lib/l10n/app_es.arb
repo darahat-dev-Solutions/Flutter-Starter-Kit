@@ -111,5 +111,18 @@
   "welcomeUser": "Bienvenido Usuario",
   "aiAssistant": "Asistente IA",
   "messages": "Mensajes",
-  "noName": "Sin nombre"
+  "noName": "Sin nombre",
+  "payment": "Pago",
+  "paymentMethods": "Métodos de pago",
+  "creditCard": "Tarjeta de crédito",
+  "payWithCreditCard": "Pagar con tarjeta de crédito o débito",
+  "debitCard": "Tarjeta de débito",
+  "payWithDebitCard": "Pagar directamente desde tu cuenta bancaria",
+  "bankTransfer": "Transferencia bancaria",
+  "payViaBankTransfer": "Pagar mediante transferencia bancaria directa",
+  "mobileMoney": "Dinero móvil",
+  "payWithMobileMoney": "Pagar con servicios de dinero móvil",
+  "transactionHistory": "Historial de transacciones",
+  "noTransactionsYet": "Aún no hay transacciones",
+  "pay": "Pagar"
 }

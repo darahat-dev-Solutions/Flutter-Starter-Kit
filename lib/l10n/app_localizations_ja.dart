@@ -343,4 +343,43 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noName => '名前なし';
+
+  @override
+  String get payment => '支払い';
+
+  @override
+  String get paymentMethods => '支払い方法';
+
+  @override
+  String get creditCard => 'クレジットカード';
+
+  @override
+  String get payWithCreditCard => 'クレジットカードまたはデビットカードで支払う';
+
+  @override
+  String get debitCard => 'デビットカード';
+
+  @override
+  String get payWithDebitCard => '銀行口座から直接支払う';
+
+  @override
+  String get bankTransfer => '銀行振込';
+
+  @override
+  String get payViaBankTransfer => '直接銀行振込で支払う';
+
+  @override
+  String get mobileMoney => 'モバイルマネー';
+
+  @override
+  String get payWithMobileMoney => 'モバイルマネーサービスで支払う';
+
+  @override
+  String get transactionHistory => '取引履歴';
+
+  @override
+  String get noTransactionsYet => 'まだ取引がありません';
+
+  @override
+  String get pay => '支払う';
 }
