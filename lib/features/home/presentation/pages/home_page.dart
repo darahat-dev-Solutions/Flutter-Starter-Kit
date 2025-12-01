@@ -1,5 +1,5 @@
-import 'package:ai_chat/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_starter_kit/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 /// Home Layout default page/body

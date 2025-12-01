@@ -1,10 +1,10 @@
-import 'package:ai_chat/app.dart';
-import 'package:ai_chat/core/services/firebase_messaging_service.dart';
-import 'package:ai_chat/core/services/initialization_service.dart';
-import 'package:ai_chat/features/auth/provider/auth_providers.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/app.dart';
+import 'package:flutter_starter_kit/core/services/firebase_messaging_service.dart';
+import 'package:flutter_starter_kit/core/services/initialization_service.dart';
+import 'package:flutter_starter_kit/features/auth/provider/auth_providers.dart';
 
 /// Top Level function to handle background messages
 

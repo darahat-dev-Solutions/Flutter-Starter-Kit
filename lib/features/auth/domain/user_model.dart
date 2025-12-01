@@ -1,4 +1,4 @@
-import 'package:ai_chat/features/auth/domain/user_role.dart';
+import 'package:flutter_starter_kit/features/auth/domain/user_role.dart';
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -23,6 +23,7 @@ class UserModel {
 
   /// User Role Definition
   @HiveField(3)
+
   /// _parseUserRole turn the String from the json map
   /// and gives you back a UserRole object
   /// From JSON String-> _parseUserRole -> UserRole Object

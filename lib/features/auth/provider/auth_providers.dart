@@ -1,6 +1,6 @@
-import 'package:ai_chat/core/services/hive_service.dart';
-import 'package:ai_chat/core/utils/logger.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/core/services/hive_service.dart';
+import 'package:flutter_starter_kit/core/utils/logger.dart';
 
 import '../application/auth_controller.dart';
 import '../application/auth_state.dart';

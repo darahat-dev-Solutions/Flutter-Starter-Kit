@@ -1,6 +1,6 @@
-import 'package:ai_chat/core/utils/logger.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/core/utils/logger.dart';
 import 'package:hive/hive.dart';
 
 import '../domain/user_model.dart';

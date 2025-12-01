@@ -90,8 +90,8 @@ Create a Riverpod `AsyncNotifierProvider` to hold and update the current `Locale
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ai_chat/features/app_settings/application/settings_state.dart';
-import 'package:ai_chat/_settings/infrastructure/settings_repository.dart';
+import 'package:flutter_starter_kit/features/app_settings/application/settings_state.dart';
+import 'package:flutter_starter_kit/_settings/infrastructure/settings_repository.dart';
 
 /// Setting Controller class
 /// Manages the application settings (theme and locale) asynchronously.
@@ -163,9 +163,9 @@ class SettingsController extends AsyncNotifier<SettingState> {
 
 ```dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ai_chat/_settings/application/settings_controller.dart';
-import 'package:ai_chat/_settings/application/settings_state.dart';
-import 'package:ai_chat/_settings/infrastructure/settings_repository.dart';
+import 'package:flutter_starter_kit/_settings/application/settings_controller.dart';
+import 'package:flutter_starter_kit/_settings/application/settings_state.dart';
+import 'package:flutter_starter_kit/_settings/infrastructure/settings_repository.dart';
 
 /// Provider for the SettingsRepository.
 /// This is a simple Provider as it doesn't manage mutable state.
@@ -190,10 +190,10 @@ In your main `App` widget, use the Riverpod provider to set the `locale` and `th
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ai_chat/art';
-import 'package:ai_chat/p_theme.dart';
-import 'package:ai_chat/_settings/provider/settings_provider.dart';
-import 'package:ai_chat/alizations.dart'; // Import generated localizations
+import 'package:flutter_starter_kit/art';
+import 'package:flutter_starter_kit/p_theme.dart';
+import 'package:flutter_starter_kit/_settings/provider/settings_provider.dart';
+import 'package:flutter_starter_kit/alizations.dart'; // Import generated localizations
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -241,8 +241,8 @@ When consuming an `AsyncNotifierProvider`, the watched state will be an `AsyncVa
 ```dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ai_chat/_settings/provider/settings_provider.dart';
-import 'package:ai_chat/alizations.dart'; // Import generated localizations
+import 'package:flutter_starter_kit/_settings/provider/settings_provider.dart';
+import 'package:flutter_starter_kit/alizations.dart'; // Import generated localizations
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});

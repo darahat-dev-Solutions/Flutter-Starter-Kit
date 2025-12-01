@@ -1,5 +1,5 @@
-import 'package:ai_chat/core/services/hive_service.dart';
-import 'package:ai_chat/features/app_settings/domain/settings_model.dart';
+import 'package:flutter_starter_kit/core/services/hive_service.dart';
+import 'package:flutter_starter_kit/features/app_settings/domain/settings_model.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

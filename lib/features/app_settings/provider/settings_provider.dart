@@ -1,8 +1,8 @@
-import 'package:ai_chat/core/services/hive_service.dart';
-import 'package:ai_chat/features/app_settings/application/settings_controller.dart';
-import 'package:ai_chat/features/app_settings/application/settings_state.dart';
-import 'package:ai_chat/features/app_settings/infrastructure/settings_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/core/services/hive_service.dart';
+import 'package:flutter_starter_kit/features/app_settings/application/settings_controller.dart';
+import 'package:flutter_starter_kit/features/app_settings/application/settings_state.dart';
+import 'package:flutter_starter_kit/features/app_settings/infrastructure/settings_repository.dart';
 
 /// Provide [SettingsRepository] instance
 ///

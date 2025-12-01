@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:ai_chat/core/services/hive_service.dart';
-import 'package:ai_chat/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/core/services/hive_service.dart';
+import 'package:flutter_starter_kit/firebase_options.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 /// Initialization Service class

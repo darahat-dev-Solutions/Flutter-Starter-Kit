@@ -1,21 +1,21 @@
-// import 'package:ai_chat/app/app_route.dart';
-// import 'package:ai_chat/core/utils/logger.dart';
-import 'package:ai_chat/features/app_settings/presentation/pages/setting_page.dart';
-import 'package:ai_chat/features/auth/application/auth_state.dart';
-import 'package:ai_chat/features/auth/domain/user_role.dart';
-import 'package:ai_chat/features/auth/presentation/pages/forgot_password_page.dart';
-import 'package:ai_chat/features/auth/presentation/pages/login_page.dart';
-import 'package:ai_chat/features/auth/presentation/pages/otp_page.dart';
-import 'package:ai_chat/features/auth/presentation/pages/phone_number_page.dart';
-import 'package:ai_chat/features/auth/presentation/pages/signup_page.dart';
-import 'package:ai_chat/features/auth/provider/auth_providers.dart';
-import 'package:ai_chat/features/home/presentation/layout/home_layout.dart';
-import 'package:ai_chat/features/home/presentation/pages/home_page.dart';
-import 'package:ai_chat/features/home/presentation/pages/second_page.dart';
-import 'package:ai_chat/features/home/presentation/pages/third_page.dart';
-import 'package:ai_chat/splashscreen.dart';
+// import 'package:flutter_starter_kit/app/app_route.dart';
+// import 'package:flutter_starter_kit/core/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/features/app_settings/presentation/pages/setting_page.dart';
+import 'package:flutter_starter_kit/features/auth/application/auth_state.dart';
+import 'package:flutter_starter_kit/features/auth/domain/user_role.dart';
+import 'package:flutter_starter_kit/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:flutter_starter_kit/features/auth/presentation/pages/login_page.dart';
+import 'package:flutter_starter_kit/features/auth/presentation/pages/otp_page.dart';
+import 'package:flutter_starter_kit/features/auth/presentation/pages/phone_number_page.dart';
+import 'package:flutter_starter_kit/features/auth/presentation/pages/signup_page.dart';
+import 'package:flutter_starter_kit/features/auth/provider/auth_providers.dart';
+import 'package:flutter_starter_kit/features/home/presentation/layout/home_layout.dart';
+import 'package:flutter_starter_kit/features/home/presentation/pages/home_page.dart';
+import 'package:flutter_starter_kit/features/home/presentation/pages/second_page.dart';
+import 'package:flutter_starter_kit/features/home/presentation/pages/third_page.dart';
+import 'package:flutter_starter_kit/splashscreen.dart';
 import 'package:go_router/go_router.dart';
 
 /// A helper class to bridge Riverpod's StateNotifier to a ChangeNotifier.

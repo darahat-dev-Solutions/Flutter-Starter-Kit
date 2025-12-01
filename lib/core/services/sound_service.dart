@@ -1,5 +1,5 @@
-import 'package:ai_chat/core/utils/logger.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_starter_kit/core/utils/logger.dart';
 
 /// Perform Notification sound
 class SoundService {

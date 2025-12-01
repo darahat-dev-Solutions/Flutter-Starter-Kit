@@ -1,10 +1,10 @@
 // lib/features/home/presentation/layout/home_layout.dart
 
-import 'package:ai_chat/features/home/presentation/widgets/home_bottom_nav.dart';
-import 'package:ai_chat/features/home/presentation/widgets/home_drawer.dart';
-import 'package:ai_chat/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_starter_kit/features/home/presentation/widgets/home_bottom_nav.dart';
+import 'package:flutter_starter_kit/features/home/presentation/widgets/home_drawer.dart';
+import 'package:flutter_starter_kit/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
 /// Home Layout (bottom navigation+sidebar+topBar+scrollable body)
