@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter_kit/core/services/hive_service.dart';
+import 'package:flutter_starter_kit/core/utils/logger.dart';
 import 'package:flutter_starter_kit/firebase_options.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -43,6 +44,7 @@ class InitializationService {
         providerWeb: ReCaptchaV3Provider('recaptcha-v3-site-key'),
       );
     }
+    final logger = ref.watch(appLoggerProvider);
 
     // await FirebaseAppCheck.instance.activate(
     //   androidProvider: AndroidProvider.debug,
@@ -50,8 +52,8 @@ class InitializationService {
     // );
     await ref.read(hiveServiceProvider).init();
     String? stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'];
-
-    if (stripePublishableKey == null || stripePublishableKey.isEmpty) {
+    logger.info(stripePublishableKey!);
+    if (stripePublishableKey.isEmpty) {
       throw Exception('STRIPE_PUBLISHABLE_KEY is not set in .env file');
     }
 
