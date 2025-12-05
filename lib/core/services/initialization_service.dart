@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_starter_kit/core/services/hive_service.dart';
@@ -58,6 +59,19 @@ class InitializationService {
     }
 
     Stripe.publishableKey = stripePublishableKey;
+
+    // Initialize Stripe on Android native side
+    if (Platform.isAndroid) {
+      try {
+        const platform = MethodChannel('stripe_config');
+        await platform.invokeMethod('setPublishableKey', {
+          'publishableKey': stripePublishableKey,
+        });
+        logger.info('Stripe initialized on Android native side');
+      } catch (e) {
+        logger.error('Failed to initialize Stripe on Android: $e');
+      }
+    }
   }
 }
 
